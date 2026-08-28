@@ -23,12 +23,20 @@ Do the Bridge first — it's a separate on‑ramp before Week 1, not part of the
 
 How the programming works
 
-Every session in the plan is fully specified — exact distances, station names, reps, rounds, rest, and weights — so there's nothing to interpret on the day.
+Every session in the plan is fully specified — nothing to interpret or remember from a previous week. Each day carries its own exact prescription:
+
+Runs state the distance and the target (easy Z2, threshold, tempo, or goal race pace) plus rep counts and recovery.
+Strength days list every movement with sets × reps and a load target (e.g. Back Squat 4×5 @ ~75%), including the specific core work (weighted plank, hanging leg raise, ab‑wheel rollout, side plank, Pallof press) with its own sets/reps — never just "core."
+Station sessions name all movements with distances, reps, and weights, including both ergs (SkiErg and Row) with distances — not just the loaded stations.
+Compromised / hybrid sessions spell out each round: the run distance, then the exact station(s) at the exact weight, in race order.
+Strides are defined concretely wherever they appear: ≈15–20s at ~90% of top speed (smooth and controlled, not an all‑out sprint), full walk‑back between each.
+
+Other conventions:
 
 Station weights are Open‑Men race standard and appear on every session: SkiErg 1000m · Sled push 50m @ 152kg · Sled pull 50m @ 103kg · Burpee broad jump 80m · Row 1000m · Farmers 200m @ 2×24kg · Sandbag lunge 100m @ 20kg · Wall balls 100 @ 6kg to the 10ft/3m target. (Sled figures include the sled itself.)
 Progression is built in. Phase 1 trains stations fresh to build capacity; Phase 2 introduces compromised running with shorter station doses at race weight; Phase 3 runs full race‑order compromised sessions at race pace plus timed simulations (half → ~75% → dress rehearsal); Phase 4 sharpens and tapers.
 Deload weeks auto‑lighten (W4, W8, W11) instead of prescribing a full grind.
-Run paces stay relational — "@ race pace", "@ 5k pace", "@ threshold" — because they're set from the 5 km time trial in Bridge Week 5, which individualizes them to me. The "How to read the plan" panel explains the mapping and shows the race‑weight reference.
+Run paces stay relational — "@ race pace", "@ 5k pace", "@ threshold" — because they're set from the 5 km time trial in Bridge Week 5, which individualizes them to me. The "How to read the plan" panel explains the mapping, the stride definition, and the race‑weight reference.
 The tabs
 Train — the week‑by‑week plan. Tap any day to open the full, explicitly‑programmed session, log your numbers, and see your last values as "ghost" placeholders. Check off days to fill the phase progress bar.
 Tests — benchmark tracking (5 km TT, 1 km HYROX pace, 500 m Ski, 500 m Row, max wall balls, simulation total). Retest at the Bridge, Week 8, and Week 13 to watch the engine come.
@@ -70,6 +78,10 @@ Data & privacy
 
 All logs are stored only in the browser on the device you use. There's no account and no server. Use More → Export to copy your data as text before switching devices, and More → Import to restore it. More → Clear wipes everything on that device and can't be undone.
 
+Changelog
+Full‑detail programming pass. Every session made self‑contained — explicit sets × reps and named core work on every strength day, both ergs (SkiErg + Row) in every station circuit, quantified strides (~90% top speed, ≈15–20s), and no "moderate / as last week" shorthand anywhere.
+Explicit station programming. Turned every compromised, hybrid, second‑hybrid, and simulation session into exact stations, distances, weights, rounds, and rest at Open‑Men race standard, progressing toward race day.
+Initial build. 16‑week plan + 5‑week transition bridge with per‑device logging, week/phase navigation, timers, and benchmark tracking.
 Possible future adds
 Supabase cross‑device sync (like Food Buddy)
 Editable pace presets
