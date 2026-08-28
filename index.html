@@ -290,31 +290,31 @@ const F={
 function tmpl(phase){
   const P1=[
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — lower / pull",
-      d:"Heavy, crisp, low volume — protect the base, don't chase fatigue.\n• Back or Front Squat 4×4–5 @ ~80% 1RM\n• Trap-bar DL or RDL 3×5\n• Weighted split squat / step-up 3×8/leg\n• Pull-ups or heavy row 4×6\n• Loaded carry 3×30m + hard core (hollow holds / weighted plank 3×45s)\nOptional: 15-min easy shakeout jog after.",f:F.str},
+      d:"Heavy, crisp, low volume — protect the base, don't chase fatigue.\n• Back or Front Squat 4×4–5 @ ~80% 1RM\n• Trap-bar Deadlift or RDL 3×5\n• Weighted split squat or step-up 3×8/leg\n• Pull-ups or heavy barbell row 4×6\n• Loaded carry 3×30m (heavy farmers or front-rack)\n• Core: Hanging leg raise 3×12 + Weighted plank 3×45s\nOptional: 15-min easy shakeout jog after.",f:F.str},
     {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + erg technique",
       d:"• 30–40 min easy Zone 2 (conversational — go slower than feels good)\n• SkiErg technique: 4×250m @ 26–30 spm, 60s rest — long pull, big legs→hips→arms\n• Row technique: 4×250m @ 24–28 spm, 60s rest — drive legs, hang on the handle\nForm over effort today; no hard breathing on the ergs.",f:F.easy},
     {dn:"Wed",tag:"Run · Intervals",type:"int",g:"int",t:w=>"Run intervals — "+w.sig,
       d:w=>"• "+w.sig+"\nThe seconds listed (e.g. \"90s jog\") are your easy recovery BETWEEN reps — not the rep time. Warm up + cool down 10 min each. Add a couple of 180° turnarounds to mimic the looped course.",f:F.int},
     {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — push / power",
-      d:"• Front or Box Squat 4×5 @ ~75%\n• Overhead Press 4×5\n• Hip thrust / hinge 3×8\n• DB bench or push press 4×6\n• Power: 3×3 box jumps or 3×5 med-ball throws (protect your D-10 power)\n• Core 3×",f:F.str},
+      d:"• Front or Box Squat 4×5 @ ~75%\n• Overhead Press 4×5\n• Barbell Hip Thrust 3×8\n• DB bench or push press 4×6\n• Power: Box jumps 3×3 or med-ball throws 3×5 (protect your D-10 power)\n• Core: Ab-wheel rollout 3×10 + Side plank 2×30s each side",f:F.str},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",
       d:"Full rest or 20–30 min mobility. Calves, ankles, hips as mileage climbs.",f:F.none},
     {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:w=>"Long run — "+w.long+" km Z2",
       d:w=>"• "+w.long+" km easy Zone 2. Treadmill at 0–1% is fine (flat & indoor = race-specific).\nLast 10–15 min can drift slightly firmer.",f:F.long},
     {dn:"Sun",tag:"Stations",type:"station",g:"circuit",t:w=>w.deload?"Station skills (deload — half volume)":"Station capacity circuit @ race weight",
       d:w=>w.deload
-        ?"Deload — grooving movement only, cut everything in half & keep it easy:\n• SkiErg 2×250m easy\n• Sled push 2×12.5m @ 152kg\n• Sled pull 2×12.5m @ 103kg\n• Farmers 2×50m @ 2×24kg\n• Wall balls 2×20 @ 6kg to the 10ft/3m target\nOr just take a second rest day."
+        ?"Deload — grooving movement only, cut everything in half & keep it easy:\n• SkiErg 2×250m easy\n• Sled push 2×12.5m @ 152kg\n• Sled pull 2×12.5m @ 103kg\n• Farmers 2×50m @ 2×24kg\n• Wall balls 2×20 @ 6kg to the 10ft/3m target\n• Row 2×250m easy\nOr just take a second rest day."
         :"Build station capacity with QUALITY reps — full recovery between sets, moderate breathing (this is skill + strength, not a grind). All Open-Men race weights, done fresh:\n• SkiErg 3×250m moderate, 60s rest\n• Sled push 3×12.5m @ 152kg, walk-back recovery\n• Sled pull 3×12.5m @ 103kg, walk-back recovery\n• Farmers carry 3×50m @ 2×24kg — go unbroken\n• Sandbag lunge 3×25m @ 20kg — knee kisses floor\n• Wall balls 4×20 @ 6kg to the 10ft/3m target, 45s rest\n• Row 3×250m easy\nTake a 2nd rest day instead if the legs are cooked.",f:F.station}
   ];
   const P2=[
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — heavier lower",
-      d:"• Back Squat 4×4 @ ~82–85%\n• Deadlift or RDL 3×4\n• Split squat 3×8/leg\n• Weighted pull-up or heavy row 4×6\n• Core 3× (weighted plank 45s + hanging knee raise 12)",f:F.str},
+      d:"• Back Squat 4×4 @ ~82–85%\n• Deadlift or RDL 3×4\n• Split squat 3×8/leg\n• Weighted pull-up or heavy row 4×6\n• Core: Weighted plank 3×45s + Hanging knee raise 3×12",f:F.str},
     {dn:"Tue",tag:"Run · Tempo",type:"int",g:"tempo",t:w=>"Threshold / tempo — "+w.sig,
       d:w=>"• "+w.sig+" — comfortably-hard, ~15–20s/km slower than 5k pace. Any seconds listed are easy jog between blocks.\n• Finish with hard core: 3×(20 sit-ups + 30s plank)\nBuilds the ability to hold pace as lactate climbs.",f:F.int},
     {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:w=>w.deload?"Station skills (deload — half volume)":"Station strength-endurance @ race weight",
       d:w=>w.deload
-        ?"Deload station day — half the volume, full recovery, technique focus. Weights still race-standard so the movement stays familiar:\n• Sled push 2×12.5m @ 152kg\n• Sled pull 2×12.5m @ 103kg\n• Farmers 2×50m @ 2×24kg\n• Wall balls 3×20 @ 6kg to the 10ft/3m target\n• Row 2×250m easy"
-        :"The strength-endurance station day — all at Open-Men race weight, moving load while breathing hard. Rest shrinks as the phase builds (W5 ~90s between moves → W7 ~45–60s):\n• Sled push 4×12.5m @ 152kg (add 10–15kg on the last 2 sets if it moves clean)\n• Sled pull 4×12.5m @ 103kg\n• Farmers carry 4×50m @ 2×24kg — unbroken, grip is the limiter\n• Sandbag lunge 4×25m @ 20kg — steady, controlled depth\n• Wall balls 4×25 @ 6kg to the 10ft/3m target\n• Row 4×250m moderate",f:F.station},
+        ?"Deload station day — half the volume, full recovery, technique focus. Weights still race-standard so the movement stays familiar:\n• SkiErg 2×250m easy (26–30 spm)\n• Sled push 2×12.5m @ 152kg\n• Sled pull 2×12.5m @ 103kg\n• Farmers 2×50m @ 2×24kg\n• Wall balls 3×20 @ 6kg to the 10ft/3m target\n• Row 2×250m easy"
+        :"The strength-endurance station day — all at Open-Men race weight, moving load while breathing hard. Rest shrinks as the phase builds (W5 ~90s between moves → W7 ~45–60s):\n• SkiErg 4×250m moderate (26–30 spm)\n• Sled push 4×12.5m @ 152kg (add 10–15kg on the last 2 sets if it moves clean)\n• Sled pull 4×12.5m @ 103kg\n• Farmers carry 4×50m @ 2×24kg — unbroken, grip is the limiter\n• Sandbag lunge 4×25m @ 20kg — steady, controlled depth\n• Wall balls 4×25 @ 6kg to the 10ft/3m target\n• Row 4×250m moderate",f:F.station},
     {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + erg intervals",
       d:"• 30 min easy Z2\n• Erg intervals: 6×500m hard, alternating SkiErg / Row, 1 min rest. Long powerful strokes ~26–30 spm, pace strong-but-repeatable (all six should match).",f:F.easy},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest or light mobility.",f:F.none},
@@ -325,7 +325,7 @@ function tmpl(phase){
   ];
   const P3=[
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength — hold & densify",
-      d:"Hold strength while shifting to density — no grinders, leave 2 reps in the tank:\n• Back Squat 4×4 @ ~80% (maintain)\n• Trap-bar carry complex 3×(20m heavy carry + 8 RDL)\n• Walking lunges 3×20m @ 2×20kg DBs\n• Push press 4×5\n• Weighted plank 3×45s",f:F.str},
+      d:"Hold strength while shifting to density — no grinders, leave 2 reps in the tank:\n• Back Squat 4×4 @ ~80% (maintain)\n• Trap-bar carry complex 3×(20m heavy carry + 8 RDL)\n• Walking lunges 3×20m @ 2×20kg DBs\n• Push press 4×5\n• Core: Weighted plank 3×45s + Hanging leg raise 3×12",f:F.str},
     {dn:"Tue",tag:"Run · Race pace",type:"int",g:"racepace",t:w=>"HYROX-pace intervals — "+w.sig,
       d:w=>"• "+w.sig+"\nRun each rep at GOAL RACE PACE; the seconds after are easy jog recovery between reps. Teach the legs what sustainable feels like — your worst race split should be Run 5–6, never 7–8.",f:F.int},
     {dn:"Wed",tag:"Compromised",type:"hybrid",g:"hybrid",t:w=>w.wedSig||"Compromised combos @ race weight",
@@ -350,44 +350,44 @@ const BRIDGE=[
     {dn:"Mon",tag:"Recovery",type:"none",g:"",t:"Full rest + mobility",d:"Sleep is the priority coming off your D-10 peak. 10–15 min easy mobility if you want to move — nothing more.",f:F.none},
     {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Very easy jog — 20 min Z2",d:"Deliberately slow and conversational. This is the first gentle nudge from power work toward aerobic — a shake-out, not a workout.",f:F.easy},
     {dn:"Wed",tag:"Recovery",type:"none",g:"",t:"Rest or 20–30 min walk",d:"Walk + mobility. Keep blood moving, zero intensity.",f:F.none},
-    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Very easy jog — 25 min Z2",d:"Same easy effort. Add 4×15s relaxed strides at the end if the legs feel good.",f:F.easy},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Very easy jog — 25 min Z2",d:"Same easy effort. If the legs feel good, finish with 4 strides: ≈15s of smooth fast running at ~90% of top speed (controlled, NOT an all-out sprint), walking back fully to recover between each.",f:F.easy},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Full rest.",f:F.none},
-    {dn:"Sat",tag:"Strength",type:"str",g:"strA",t:"Light full-body maintenance",d:"One easy full-body session at ~60–70%:\n• Squat 3×5 (light)\n• Hinge 3×5\n• Press 3×6\n• Row/pull-up 3×8\nJust holding the base while you recover. Skip it if you'd rather stay fully rested.",f:F.str},
+    {dn:"Sat",tag:"Strength",type:"str",g:"strA",t:"Light full-body maintenance",d:"One easy full-body session at ~60–65% of your working weights — just holding the base while you recover:\n• Back Squat 3×5 @ ~60–65%\n• Romanian Deadlift 3×5\n• Overhead Press 3×6\n• Pull-ups (or lat pulldown) 3×8\n• Core: Weighted plank 3×40s + Hanging knee raise 3×12\nSkip it entirely if you'd rather stay fully rested.",f:F.str},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest. You're ready to start building next week.",f:F.none}
   ]},
   {label:"Bridge · Week 2",sub:"Aerobic re-entry begins",km:"~12",days:[
-    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body maintenance",d:"Moderate load, lower volume than D-10:\n• Squat 3×5\n• Hinge (RDL/DL) 3×5\n• Press 3×6\n• Row / pull-up 3×8\n• Core. Keep 2 sets of jumps or med-ball throws to hold your power.",f:F.str},
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body maintenance",d:"Moderate load, lower volume than D-10:\n• Back Squat 3×5 @ ~70%\n• Romanian Deadlift 3×5\n• Overhead Press 3×6\n• Barbell row or pull-up 3×8\n• Power (hold your D-10 pop): Box jumps 2×4 or med-ball slams 2×6\n• Core: Weighted plank 3×45s + Hanging knee raise 3×12",f:F.str},
     {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 25 min Z2",d:"Conversational pace, nose-breathing-ish. Slower than feels satisfying — that's the point.",f:F.easy},
-    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg technique + easy jog",d:"• 15 min easy jog\n• SkiErg + Row TECHNIQUE: long, powerful strokes at 26–30 spm. 4×250m each, relaxed — focus on the stroke, not speed.",f:F.station},
-    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body maintenance",d:"• Front / Box squat 3×5\n• Overhead press 3×5\n• Hip thrust 3×8\n• DB bench or push press 3×6\n• Core.",f:F.str},
+    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg technique + easy jog",d:"• 15 min easy jog\n• SkiErg TECHNIQUE: 4×250m @ 26–30 spm, 60s rest — long pull, big legs→hips→arms\n• Row TECHNIQUE: 4×250m @ 24–28 spm, 60s rest — drive legs, then open hips, then arms\nRelaxed — focus on the stroke, not speed.",f:F.station},
+    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body maintenance",d:"• Front (or Box) Squat 3×5 @ ~70%\n• Overhead Press 3×5\n• Barbell Hip Thrust 3×8\n• DB Bench Press (or push press) 3×6\n• Core: Ab-wheel rollout 3×10 + Side plank 2×30s each side",f:F.str},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest or light mobility.",f:F.none},
     {dn:"Sat",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 30 min Z2",d:"Your slightly longer run this week. Still fully easy.",f:F.easy},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest or 20 min walk",d:"Optional easy walk. No running.",f:F.none}
   ]},
   {label:"Bridge · Week 3",sub:"Build easy volume + start the stations",km:"~16",days:[
-    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body",d:"As Week 2; nudge loads up slightly if the sets feel crisp. Squat / hinge / press / pull + core.",f:F.str},
-    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 30–35 min Z2 + strides",d:"Conversational, then 4×15s relaxed strides at the end.",f:F.easy},
-    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg intervals + wall-ball form",d:"• Ski 4×300m, Row 4×300m — smooth, moderate, long strokes\n• Wall balls 3×15 @ 6kg to the 10ft/3m target — groove the rhythm, keep it light.",f:F.station},
-    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body",d:"Squat / press / hinge / push + core. Moderate.",f:F.str},
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body",d:"Nudge loads up ~5% if the sets feel crisp — full session:\n• Back Squat 4×5 @ ~72–75%\n• Romanian Deadlift 3×6\n• Overhead Press 4×6\n• Weighted pull-up or barbell row 4×6\n• Power: Box jumps 3×4\n• Core: Weighted plank 3×45s + Hanging leg raise 3×12",f:F.str},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 30–35 min Z2 + strides",d:"Conversational, then finish with 4 strides: ≈15s of smooth fast running at ~90% of top speed (controlled, not an all-out sprint), full walk-back recovery between each.",f:F.easy},
+    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg intervals + wall-ball form",d:"• SkiErg 4×300m @ moderate (smooth, long strokes), 60s rest\n• Row 4×300m @ moderate, 60s rest\n• Wall balls 3×15 @ 6kg to the 10ft/3m target — groove the rhythm, keep it light",f:F.station},
+    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body",d:"• Front (or Box) Squat 4×5 @ ~72%\n• Overhead Press 4×5\n• Barbell Hip Thrust 3×8\n• DB Bench (or push press) 4×6\n• Core: Ab-wheel rollout 3×12 + Pallof press 3×10 each side",f:F.str},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest.",f:F.none},
     {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"First long run — 6 km easy Z2",d:"Your first 'long' one. Keep it fully conversational; treadmill at 0–1% is fine (flat & indoor = race-specific).",f:F.long},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest or 20 min walk",d:"Easy walk or rest.",f:F.none}
   ]},
   {label:"Bridge · Week 4",sub:"Steady base + station familiarization",km:"~20",days:[
-    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body",d:"Squat / hinge / press / pull + core, moderate.",f:F.str},
-    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 35 min Z2 + strides",d:"35 min easy + 4–6×15s strides (gentle turnover, not sprints).",f:F.easy},
-    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Station familiarization — all 8 movements",d:"Learn the movements & transitions at ~60–70% of race weight — don't grind:\n• Sled push 4×12.5m @ ~100kg\n• Sled pull 4×12.5m @ ~70kg\n• Farmers 3×40m @ 2×16kg\n• Sandbag lunge 3×20m @ 15kg\n• Wall balls 3×20 @ 6kg to the 10ft/3m target\n• Burpee broad jumps 2×10m\n(Race weights are heavier — 152/103kg sleds, 2×24kg carry, 20kg bag — you'll build to those in Phase 2.)",f:F.station},
-    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body",d:"Moderate full-body + core.",f:F.str},
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body",d:"• Back Squat 4×5 @ ~75%\n• Romanian Deadlift 3×6\n• Overhead Press 4×6\n• Weighted pull-up or barbell row 4×6\n• Power: Box jumps 3×4\n• Core: Weighted plank 3×50s + Hanging leg raise 3×15",f:F.str},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 35 min Z2 + strides",d:"35 min easy, then 4–6 strides: ≈15s of smooth fast running at ~90% of top speed (gentle, quick turnover — not sprints), full walk-back between each.",f:F.easy},
+    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Station familiarization — all 8 movements",d:"Learn all 8 movements & transitions in race order at ~60–70% of race weight — don't grind:\n• SkiErg 3×250m moderate (26–30 spm)\n• Sled push 4×12.5m @ ~100kg\n• Sled pull 4×12.5m @ ~70kg\n• Burpee broad jumps 2×10m\n• Row 3×250m moderate\n• Farmers 3×40m @ 2×16kg\n• Sandbag lunge 3×20m @ 15kg\n• Wall balls 3×20 @ 6kg to the 10ft/3m target\n(Race weights are heavier — 152/103kg sleds, 2×24kg carry, 20kg bag — you'll build to those in Phase 2.)",f:F.station},
+    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body",d:"• Front (or Box) Squat 4×5 @ ~72%\n• Overhead Press 4×5\n• Barbell Hip Thrust 3×10\n• DB Bench (or push press) 4×6\n• Core: Ab-wheel rollout 3×12 + Side plank 2×40s each side",f:F.str},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest.",f:F.none},
     {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 7 km easy Z2",d:"Easy and conversational. Fuel lightly if it runs long.",f:F.long},
     {dn:"Sun",tag:"Run · Easy",type:"easy",g:"easy",t:"Optional easy 25 min jog",d:"Very easy shakeout, or rest if the legs are cooked.",f:F.easy}
   ]},
   {label:"Bridge · Week 5",sub:"Set your baselines, then hand off to Week 1",km:"~18 + tests",days:[
-    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — lighter (testing this week)",d:"Trim the volume so you're fresh for the tests. Moderate load, crisp sets.",f:F.str},
-    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 25 min + strides",d:"Shakeout + 4×20s strides. Keep it light before tomorrow's test.",f:F.easy},
-    {dn:"Wed",tag:"Benchmark",type:"none",g:"",t:"TEST 1 — 5 km time trial",d:"Warm up well (15 min easy + a few strides), then run a hard, even 5 km. This sets your easy / threshold / interval paces for the whole plan. Log it in the Tests tab.",f:F.none},
-    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 25–30 min + erg technique",d:"Easy Z2 to flush the legs + a few relaxed Ski/Row pieces. No hard efforts.",f:F.none},
-    {dn:"Fri",tag:"Benchmark",type:"none",g:"",t:"TEST 2 — ergs, wall balls & 1 km feel",d:"After a warm-up, log each in the Tests tab:\n• 500m SkiErg for time\n• 500m Row for time\n• Max unbroken wall balls\n• 1 km at 'HYROX pace' (≈ your 5k pace + 15–20s/km) — note how it feels; this is your goal race-run pace.",f:F.none},
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — lighter (testing this week)",d:"Cut total volume ~40% so your legs are fresh for Wednesday's 5k test — same moves, fewer & crisper sets, no grinding to failure:\n• Back Squat 3×3 @ ~70% (fast and clean, leave 3 reps in the tank)\n• Romanian Deadlift 2×5\n• Overhead Press 3×5\n• Pull-up or barbell row 3×6\n• Core: Weighted plank 2×45s\nThis is a primer, not a builder.",f:F.str},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 25 min + strides",d:"25 min shakeout, then 4 strides: ≈20s at ~90% of top speed (smooth, controlled), full walk-back between each. Keep it light before tomorrow's test.",f:F.easy},
+    {dn:"Wed",tag:"Benchmark",type:"none",g:"",t:"TEST 1 — 5 km time trial",d:"Warm up well: 15 min easy + 3–4 strides (≈15s @ ~90% top speed, full walk-back). Then run a hard, even 5 km. This sets your easy / threshold / interval paces for the whole plan. Log it in the Tests tab.",f:F.none},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 25–30 min + erg technique",d:"• 25–30 min easy Z2 to flush the legs\n• SkiErg 3×250m + Row 3×250m, easy & relaxed (long strokes, 26–30 spm). No hard efforts.",f:F.none},
+    {dn:"Fri",tag:"Benchmark",type:"none",g:"",t:"TEST 2 — ergs, wall balls & 1 km feel",d:"After a warm-up, log each in the Tests tab:\n• 500m SkiErg for time\n• 500m Row for time\n• Max unbroken wall balls @ 6kg to 10ft\n• 1 km at 'HYROX pace' (≈ your 5k pace + 15–20s/km) — note how it feels; this is your goal race-run pace.",f:F.none},
     {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 8 km easy Z2",d:"Last bridge run. Comfortable and easy. Week 1 starts Monday.",f:F.long},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest — ready for Week 1",d:"Full rest. Base built, paces set, stations learned. Phase 1 begins tomorrow.",f:F.none}
   ]}
@@ -395,25 +395,25 @@ const BRIDGE=[
 function bridgeFlat(){return BRIDGE.reduce((a,w)=>a.concat(w.days),[]);}
 const P4_WEEKS={
   14:[
-    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Light strength (crisp)",d:"Low volume, moderate load. Movement, not fatigue.",f:F.str},
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Light strength (crisp)",d:"Low volume, moderate load — movement, not fatigue. Leave the gym feeling fresh:\n• Back Squat 3×3 @ ~75% (fast and clean)\n• Romanian Deadlift 2×5\n• Overhead Press 3×5\n• Pull-up or barbell row 3×6\n• Core: Weighted plank 2×45s",f:F.str},
     {dn:"Tue",tag:"Run · Race pace",type:"int",g:"racepace",t:"Sharp — 4×1 km @ race pace",d:"4×1km at goal race pace, 90s easy jog recovery between reps. Feel fast and smooth.",f:F.int},
     {dn:"Wed",tag:"Compromised",type:"hybrid",g:"hybrid",t:"Short compromised touch",d:"3 rounds, race-pace runs, race weights, full recovery between — quality not volume:\n• R1: 800m + Sled push 50m @ 152kg\n• R2: 800m + Wall balls 30 @ 6kg to 10ft\n• R3: 800m + Sled pull 50m @ 103kg",f:F.hybrid},
-    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides",d:"25–30 min easy + 4–6×20s strides.",f:F.easy},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides",d:"25–30 min easy, then 4–6 strides: ≈20s at ~90% of top speed (smooth, controlled — not a sprint), full walk-back between each.",f:F.easy},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Rest.",f:F.none},
     {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 10 km",d:"Last longer run. Comfortable Z2.",f:F.long},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest. Volume is now draining out; sharpness stays.",f:F.none}
   ],
   15:[
-    {dn:"Mon",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides",d:"30 min easy + 4×20s strides.",f:F.easy},
+    {dn:"Mon",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides",d:"30 min easy, then 4 strides: ≈20s at ~90% of top speed (smooth, controlled), full walk-back between each.",f:F.easy},
     {dn:"Tue",tag:"Primer",type:"hybrid",g:"hybrid",t:"Short primer — 3×(500m + station)",d:"Sharp & short — priming, not training. 3 rounds, brisk runs, full recovery:\n• R1: 500m + SkiErg 250m\n• R2: 500m + Wall balls 20 @ 6kg to 10ft\n• R3: 500m + Farmers 100m @ 2×24kg\nNever grind — stop while you feel good.",f:F.hybrid},
-    {dn:"Wed",tag:"Strength",type:"str",g:"strA",t:"Low-volume feel-good lift",d:"A few crisp sets, moderate load. Nothing sore.",f:F.str},
+    {dn:"Wed",tag:"Strength",type:"str",g:"strA",t:"Low-volume feel-good lift",d:"A few crisp sets, moderate load, nothing sore — stop while it still feels easy:\n• Back Squat 3×3 @ ~70%\n• Overhead Press 3×4\n• Pull-up 3×6\n• Core: Weighted plank 2×40s",f:F.str},
     {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 30 min",d:"Easy shakeout.",f:F.easy},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Rest.",f:F.none},
-    {dn:"Sat",tag:"Run · Easy",type:"long",g:"long",t:"Easy 8 km + strides",d:"8 km easy + 4×20s strides. Legs turning over, tank full.",f:F.long},
+    {dn:"Sat",tag:"Run · Easy",type:"long",g:"long",t:"Easy 8 km + strides",d:"8 km easy, then 4 strides: ≈20s at ~90% of top speed (smooth, controlled), full walk-back between each. Legs turning over, tank full.",f:F.long},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Rest.",f:F.none}
   ],
   16:[
-    {dn:"Mon",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides + few wall balls",d:"20–25 min easy + strides + 2×15 wall balls to prime.",f:F.easy},
+    {dn:"Mon",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides + few wall balls",d:"20–25 min easy, then 4 strides: ≈20s at ~90% of top speed (smooth, controlled), full walk-back between each. Finish with 2×15 wall balls @ 6kg to 10ft to prime the pattern.",f:F.easy},
     {dn:"Tue",tag:"Openers",type:"hybrid",g:"",t:"Openers — prime the system",d:"Race-minus-2 primer. In and out, zero fatigue:\n• 4×200m @ race pace, full recovery\n• SkiErg 250m easy\n• Row 250m easy\n• 2×10 wall balls @ 6kg to 10ft\nWake the systems, then stop while you feel fresh.",f:F.none},
     {dn:"Wed",tag:"Recovery",type:"none",g:"",t:"Full rest · travel · walkthrough",d:"Rest. Travel to Navy Pier. Light course walkthrough, register, lay out kit. Carbs up, hydrate w/ electrolytes.",f:F.none},
     {dn:"Thu",tag:"RACE",type:"sim",g:"",t:"🏁 RACE DAY — HYROX Chicago",d:"Wave 08:00–10:00. Pace Run 1 EASY. Jog every Roxzone. Break wall balls from rep 1 (25-25-25-25). Cross-trainers, pace on your wrist. Finish strong — log your time here.",f:F.sim}
@@ -436,14 +436,14 @@ const WMETA=[
   {id:7,label:"W7",date:"Dec 7",phase:"p2",theme:"Str-End · TEST",runKm:"~34",long:14,deload:false,sig:"4×6 min tempo, 90s jog between blocks",
     sunSig:"⏱ HALF-SIMULATION — time it",simSun:true,
     sunDetail:"HALF-SIM — first 4 stations in race order at FULL race distance & weight. Jog every transition and TIME the whole thing. Run at ~goal race pace:\n• 1km run → SkiErg 1000m\n• 1km run → Sled push 50m @ 152kg\n• 1km run → Sled pull 50m @ 103kg\n• 1km run → Burpee broad jump 80m\n• 1km run to finish\nThat's 5km run + 4 stations. Log total in Tests (Simulation)."},
-  {id:8,label:"W8",date:"Dec 14",phase:"p2",theme:"Str-End · DELOAD",runKm:"~22",long:9,deload:true,sig:"20 min easy + 4×20s strides",
+  {id:8,label:"W8",date:"Dec 14",phase:"p2",theme:"Str-End · DELOAD",runKm:"~22",long:9,deload:true,sig:"20 min easy + 4 strides (≈20s @ ~90% top speed, full walk-back)",
     sunSig:"Easy station skills (deload)",
-    sunDetail:"Deload — technique only, stay fresh. No compromised running this week:\n• SkiErg 3×250m easy\n• Wall balls 3×20 @ 6kg (smooth rhythm)\n• Farmers 2×100m @ 2×24kg\nRest instead if you'd prefer."},
+    sunDetail:"Deload — technique only, stay fresh. No compromised running this week:\n• SkiErg 3×250m easy\n• Row 3×250m easy\n• Wall balls 3×20 @ 6kg (smooth rhythm)\n• Farmers 2×100m @ 2×24kg\nRest instead if you'd prefer."},
   {id:9,label:"W9",date:"Dec 21",phase:"p3",theme:"Race Specificity",runKm:"~30",long:12,deload:false,sig:"5×1km @ race pace, 90s jog recovery",
     wedSig:"Compromised — 5×(1km + station), race order",
     wedDetail:"The money session. 5 rounds in race order at race weight. Run each 1km at GOAL RACE PACE, jog ~200m into each station, minimal rest beyond that:\n• R1: 1km + SkiErg 500m\n• R2: 1km + Sled push 50m @ 152kg\n• R3: 1km + Sled pull 50m @ 103kg\n• R4: 1km + Burpee broad jump 40m\n• R5: 1km + Farmers carry 100m @ 2×24kg",
     sun2Sig:"Station volume (fresh, not compromised)",
-    sun2Detail:"Pure station capacity, fresh & full recovery — lighter than Wed:\n• SkiErg 4×250m, 60s rest\n• Sled push 5×12.5m @ 152kg, walk-back\n• Wall balls 5×20 @ 6kg to 10ft, 45s rest\n• Farmers 3×100m @ 2×24kg\n• Sandbag lunge 3×50m @ 20kg\nTake full rest instead if Wednesday hit hard."},
+    sun2Detail:"Pure station capacity, fresh & full recovery — lighter than Wed:\n• SkiErg 4×250m, 60s rest\n• Sled push 5×12.5m @ 152kg, walk-back\n• Wall balls 5×20 @ 6kg to 10ft, 45s rest\n• Farmers 3×100m @ 2×24kg\n• Sandbag lunge 3×50m @ 20kg\n• Row 4×250m, 60s rest\nTake full rest instead if Wednesday hit hard."},
   {id:10,label:"W10",date:"Dec 28",phase:"p3",theme:"Race Specificity",runKm:"~34",long:13,deload:false,sig:"6×1km @ race pace, 75s jog recovery",
     wedSig:"Compromised — 6×(1km + station), race order",
     wedDetail:"6 rounds in race order, race weights, jog transitions only (no standing rest). Runs at race pace:\n• R1: 1km + SkiErg 500m\n• R2: 1km + Sled push 50m @ 152kg\n• R3: 1km + Sled pull 50m @ 103kg\n• R4: 1km + Row 500m\n• R5: 1km + Sandbag lunge 50m @ 20kg\n• R6: 1km + Wall balls 40 @ 6kg to 10ft",
@@ -554,6 +554,7 @@ function readKey(){
     '<p><b>Intervals:</b> the pace applies to each rep; the seconds after it are your <b>easy jog recovery between reps</b>. "6×800m @ 5k pace, 90s jog" = run 800m at 5k pace, jog 90s easy, repeat ×6.</p>'+
     '<p><b>Z2 / easy:</b> conversational pace you could hold a chat at — most of your running lives here.</p>'+
     '<p><b>Race pace:</b> the goal pace you can hold across all 8 race runs (≈ your 5k pace + 15–20s/km for a first race).</p>'+
+    '<p><b>Strides</b> = short bursts of ≈15–20s spent running at about <b>90% of your top speed</b> — fast and smooth, never an all-out sprint — with a full walk (or slow jog) back to recover before the next. They wake up turnover without adding fatigue.</p>'+
     '<p><b>Station weights are Open-Men race standard</b> and appear on every session: SkiErg 1000m · Sled push 50m @ 152kg · Sled pull 50m @ 103kg · Burpee broad jump 80m · Row 1000m · Farmers 200m @ 2×24kg · Sandbag lunge 100m @ 20kg · Wall balls 100 @ 6kg to the 10ft/3m target. Sleds include the sled itself.</p>'+
     '<p><b>Compromised rounds</b> (e.g. "1km + Sled push 50m @ 152kg") = run, then straight into that station at that weight — the whole point is running on tired legs. Training rounds use shorter station doses at full race weight; <b>simulations</b> use full race distances.</p>'+
     '<p><b>Tap any day</b> to open the full session, log it, and see your last values. The red button (bottom-right) = timers.</p>'+
