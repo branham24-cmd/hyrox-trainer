@@ -14,15 +14,23 @@ The program runs across five phases, shown as the progress "spine" in the header
 
 Phase	Length	Focus
 Transition Bridge	~5 weeks	Re‑entry off D‑10 — rebuild easy running, relearn ergs/stations, set baseline tests
-Phase 1 — Aerobic Base	4 weeks	Build the aerobic engine
-Phase 2 — Strength‑Endurance	4 weeks	Hold pace as fatigue climbs; stations at race weight
-Phase 3 — Race Specificity	5 weeks	Compromised running, race‑pace work, simulations
+Phase 1 — Aerobic Base	4 weeks	Build the aerobic engine; station work as fresh capacity blocks
+Phase 2 — Strength‑Endurance	4 weeks	Stations at race weight; compromised running introduced
+Phase 3 — Race Specificity	5 weeks	Full race‑order compromised work, race‑pace runs, simulations
 Phase 4 — Sharpen & Taper	3 weeks	Openers, primers, race day
 
 Do the Bridge first — it's a separate on‑ramp before Week 1, not part of the numbered weeks.
 
+How the programming works
+
+Every session in the plan is fully specified — exact distances, station names, reps, rounds, rest, and weights — so there's nothing to interpret on the day.
+
+Station weights are Open‑Men race standard and appear on every session: SkiErg 1000m · Sled push 50m @ 152kg · Sled pull 50m @ 103kg · Burpee broad jump 80m · Row 1000m · Farmers 200m @ 2×24kg · Sandbag lunge 100m @ 20kg · Wall balls 100 @ 6kg to the 10ft/3m target. (Sled figures include the sled itself.)
+Progression is built in. Phase 1 trains stations fresh to build capacity; Phase 2 introduces compromised running with shorter station doses at race weight; Phase 3 runs full race‑order compromised sessions at race pace plus timed simulations (half → ~75% → dress rehearsal); Phase 4 sharpens and tapers.
+Deload weeks auto‑lighten (W4, W8, W11) instead of prescribing a full grind.
+Run paces stay relational — "@ race pace", "@ 5k pace", "@ threshold" — because they're set from the 5 km time trial in Bridge Week 5, which individualizes them to me. The "How to read the plan" panel explains the mapping and shows the race‑weight reference.
 The tabs
-Train — the week‑by‑week plan. Tap any day to open the full session, log your numbers, and see your last values as "ghost" placeholders. Check off days to fill the phase progress bar.
+Train — the week‑by‑week plan. Tap any day to open the full, explicitly‑programmed session, log your numbers, and see your last values as "ghost" placeholders. Check off days to fill the phase progress bar.
 Tests — benchmark tracking (5 km TT, 1 km HYROX pace, 500 m Ski, 500 m Row, max wall balls, simulation total). Retest at the Bridge, Week 8, and Week 13 to watch the engine come.
 Course — the 8 stations in race order with weights and race‑day rules of thumb.
 Fuel — carb/protein targets periodized to the training day; syncs conceptually with my Food Buddy macros.
@@ -51,7 +59,7 @@ Add an empty .nojekyll file at the root (stops GitHub from processing the site w
 In the repo: Settings → Pages → Build and deployment → Source: Deploy from a branch, pick your branch (e.g. main) and folder / (root), then Save.
 Wait ~1 minute; the live URL appears at the top of the Pages settings.
 
-To update: replace index.html with the new version, commit, and Pages redeploys automatically.
+To update: replace index.html with the new version, commit, and Pages redeploys automatically. Logged data is untouched — it lives in the browser, not the file. Hard‑refresh the live page after a deploy.
 
 Repo layout
 /
