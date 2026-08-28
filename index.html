@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>HYROX Trainer — Chicago '27</title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="HYROX" />
+<meta name="theme-color" content="#0d1117" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%230d1117'/%3E%3Ctext x='90' y='118' font-family='Arial Black,Arial' font-size='84' font-weight='900' fill='%23e5484d' text-anchor='middle'%3ER%3C/text%3E%3C/svg%3E" />
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2230; --panel3:#232b3a;
+    --border:#2a3240; --text:#e6edf3; --muted:#8b949e; --muted2:#6b7686;
+    --good:#3fb950; --accent:#f5b942; --race:#e5484d;
+    --bridge:#5b8fb0; --p1:#33b3a6; --p2:#e0b341; --p3:#e8792e; --p4:#e5484d;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-t: env(safe-area-inset-top, 0px);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;}
+  body{padding-bottom:calc(78px + var(--safe-b));}
+  .mono{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;}
+  h1,h2,h3{margin:0;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  input,textarea{font-family:inherit;}
+
+  /* Header */
+  header{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,#0d1117 70%,rgba(13,17,23,.0));
+    padding:calc(10px + var(--safe-t)) 16px 6px;}
+  .brand{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .logo{display:flex;align-items:center;gap:9px;}
+  .logo .mark{width:30px;height:30px;border-radius:8px;background:#0d1117;border:1px solid var(--border);
+    display:grid;place-items:center;font-weight:900;color:var(--race);font-size:19px;}
+  .logo b{font-size:15px;letter-spacing:.06em;text-transform:uppercase;font-weight:800;}
+  .logo span{display:block;font-size:10.5px;color:var(--muted);letter-spacing:.02em;margin-top:1px;}
+  .countdown{text-align:right;line-height:1;}
+  .countdown .n{font-size:22px;font-weight:900;}
+  .countdown .l{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+
+  /* Phase spine */
+  .spine{display:flex;gap:3px;margin:10px 0 4px;}
+  .seg{flex:1;height:7px;border-radius:4px;background:#20262f;position:relative;overflow:hidden;opacity:.55;}
+  .seg.on{opacity:1;}
+  .seg i{position:absolute;inset:0;transform:scaleX(var(--fill,0));transform-origin:left;transition:transform .3s;}
+  .spinelbl{display:flex;justify-content:space-between;font-size:9px;color:var(--muted2);
+    text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px;}
+
+  /* Week strip */
+  .weekstrip{display:flex;gap:7px;overflow-x:auto;padding:8px 16px 10px;scrollbar-width:none;}
+  .weekstrip::-webkit-scrollbar{display:none;}
+  .wk{flex:0 0 auto;min-width:52px;padding:8px 10px;border-radius:12px;background:var(--panel);
+    border:1px solid var(--border);text-align:center;transition:.15s;}
+  .wk .t{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+  .wk .d{font-size:16px;font-weight:800;margin-top:1px;}
+  .wk.active{border-color:var(--ph);background:var(--panel2);box-shadow:0 0 0 1px var(--ph) inset;}
+  .wk.done .d{color:var(--good);}
+  .wk .dot{width:5px;height:5px;border-radius:50%;background:var(--ph);margin:3px auto 0;}
+
+  main{padding:0 16px;}
+
+  /* Week header card */
+  .weekhead{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:14px 15px;margin-bottom:12px;
+    border-left:4px solid var(--ph);}
+  .weekhead .phase{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:var(--ph);}
+  .weekhead h2{font-size:18px;margin:2px 0 3px;font-weight:800;}
+  .weekhead .sub{font-size:12.5px;color:var(--muted);}
+  .stats{display:flex;gap:8px;margin-top:11px;}
+  .stat{flex:1;background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:8px 9px;}
+  .stat .k{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;}
+  .stat .v{font-size:15px;font-weight:800;margin-top:2px;}
+  .deloadtag{display:inline-block;margin-top:9px;font-size:11px;font-weight:700;color:#0d1117;
+    background:var(--accent);padding:3px 9px;border-radius:20px;letter-spacing:.03em;}
+  .sigline{margin-top:10px;font-size:12.5px;color:var(--text);background:var(--panel3);
+    border-radius:10px;padding:9px 11px;line-height:1.4;}
+  .sigline b{color:var(--ph);}
+
+  /* How-to-read key */
+  .readkey{background:var(--panel);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;}
+  .readkey summary{list-style:none;padding:11px 14px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:7px;}
+  .readkey summary::-webkit-details-marker{display:none;}
+  .readkey summary::before{content:"ⓘ";color:var(--accent);font-style:normal;}
+  .readkey[open] summary{color:var(--text);}
+  .readkey .rk{padding:0 14px 12px;}
+  .readkey .rk p{font-size:12px;line-height:1.5;color:#cdd6e0;margin:0 0 7px;}
+  .readkey .rk p:last-child{margin:0;}
+  .readkey .rk b{color:var(--text);}
+  /* Bridge sub-week headers */
+  .subhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:20px 3px 9px;}
+  .subhead .l{font-size:12.5px;font-weight:800;color:var(--bridge);text-transform:uppercase;letter-spacing:.05em;}
+  .subhead .k{font-size:10.5px;color:var(--muted);text-align:right;line-height:1.35;}
+
+  /* Day accordion */
+  .day{background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:9px;overflow:hidden;}
+  .dayhead{display:flex;align-items:center;gap:11px;padding:13px 14px;width:100%;text-align:left;}
+  .check{width:24px;height:24px;flex:0 0 auto;border-radius:7px;border:2px solid var(--border);
+    display:grid;place-items:center;transition:.15s;}
+  .check.on{background:var(--good);border-color:var(--good);}
+  .check svg{width:14px;height:14px;stroke:#0d1117;stroke-width:3.5;fill:none;display:none;}
+  .check.on svg{display:block;}
+  .daymeta{flex:1;min-width:0;}
+  .daymeta .dn{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .daymeta .dt{font-size:14.5px;font-weight:700;margin-top:1px;line-height:1.25;}
+  .tag{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:3px 7px;
+    border-radius:6px;flex:0 0 auto;}
+  .chev{color:var(--muted);transition:.2s;flex:0 0 auto;}
+  .day.open .chev{transform:rotate(90deg);}
+  .daybody{display:none;padding:0 14px 14px;}
+  .day.open .daybody{display:block;}
+  .detail{font-size:13px;line-height:1.5;color:#cdd6e0;background:var(--panel2);border-radius:10px;
+    padding:11px 12px;margin-bottom:11px;white-space:pre-line;}
+  .detail b{color:var(--text);}
+
+  /* log fields */
+  .fields{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+  .field{flex:1 1 30%;min-width:92px;}
+  .field label{display:block;font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;}
+  .field input{width:100%;background:var(--panel2);border:1px solid var(--border);border-radius:9px;
+    color:var(--text);padding:9px 10px;font-size:15px;}
+  .field.full{flex:1 1 100%;}
+  .field textarea{width:100%;background:var(--panel2);border:1px solid var(--border);border-radius:9px;
+    color:var(--text);padding:9px 10px;font-size:14px;resize:vertical;min-height:44px;}
+  .field input::placeholder,.field textarea::placeholder{color:var(--muted2);}
+  .ghost{font-size:10px;color:var(--muted2);margin-top:3px;}
+  .ghost b{color:var(--accent);}
+  .rowbtns{display:flex;gap:8px;}
+  .btn{flex:1;border:1px solid var(--border);background:var(--panel2);border-radius:10px;padding:11px;
+    font-size:13px;font-weight:700;text-align:center;transition:.15s;}
+  .btn:active{transform:scale(.98);}
+  .btn.primary{background:var(--ph);border-color:var(--ph);color:#0d1117;}
+  .btn.ghostbtn{color:var(--muted);}
+
+  /* Tabs */
+  nav{position:fixed;bottom:0;left:0;right:0;z-index:40;background:#10151d;border-top:1px solid var(--border);
+    display:flex;padding:6px 6px calc(6px + var(--safe-b));}
+  nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;
+    font-size:10px;color:var(--muted);font-weight:600;}
+  nav button.on{color:var(--text);}
+  nav svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none;}
+  nav button.on svg{stroke:var(--accent);}
+
+  /* Timer FAB + sheet */
+  .fab{position:fixed;right:16px;bottom:calc(84px + var(--safe-b));z-index:45;width:56px;height:56px;
+    border-radius:50%;background:var(--race);display:grid;place-items:center;
+    box-shadow:0 6px 20px rgba(229,72,77,.4);}
+  .fab svg{width:26px;height:26px;stroke:#fff;stroke-width:2.2;fill:none;}
+  .sheet-wrap{position:fixed;inset:0;z-index:60;display:none;}
+  .sheet-wrap.on{display:block;}
+  .scrim{position:absolute;inset:0;background:rgba(0,0,0,.6);}
+  .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--panel);border-radius:20px 20px 0 0;
+    padding:16px 16px calc(20px + var(--safe-b));max-height:88vh;overflow-y:auto;
+    border-top:1px solid var(--border);}
+  .grab{width:38px;height:4px;border-radius:3px;background:var(--border);margin:0 auto 14px;}
+  .segpick{display:flex;gap:6px;background:var(--panel2);border-radius:12px;padding:4px;margin-bottom:16px;}
+  .segpick button{flex:1;padding:9px;border-radius:9px;font-size:13px;font-weight:700;color:var(--muted);}
+  .segpick button.on{background:var(--panel3);color:var(--text);}
+  .clock{font-size:58px;font-weight:800;text-align:center;letter-spacing:.01em;margin:6px 0 4px;font-variant-numeric:tabular-nums;}
+  .clock.warn{color:var(--accent);}
+  .clock.go{color:var(--good);}
+  .clock.rest{color:var(--bridge);}
+  .phaselbl{text-align:center;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;min-height:15px;}
+  .tset{display:flex;gap:8px;margin-bottom:12px;}
+  .tset .field{flex:1;}
+  .laps{max-height:150px;overflow-y:auto;margin:10px 0;}
+  .lap{display:flex;justify-content:space-between;padding:7px 10px;font-size:13px;border-bottom:1px solid var(--border);}
+  .lap .mono{color:var(--accent);}
+
+  /* generic content cards */
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:14px 15px;margin-bottom:11px;}
+  .card h3{font-size:14px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+  .card h3 .pill{font-size:9.5px;padding:2px 8px;border-radius:20px;background:var(--panel3);color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+  .card p{font-size:13px;line-height:1.55;color:#cdd6e0;margin:0 0 8px;}
+  .card p:last-child{margin-bottom:0;}
+  table.ref{width:100%;border-collapse:collapse;font-size:12.5px;}
+  table.ref td{padding:9px 8px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.4;}
+  table.ref tr td:first-child{font-weight:700;white-space:nowrap;color:var(--text);width:34%;}
+  table.ref td:nth-child(2){color:#cdd6e0;}
+  .load{color:var(--accent);font-weight:700;font-size:11.5px;}
+  .sectitle{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:18px 4px 9px;font-weight:800;}
+  .bm{display:flex;align-items:center;gap:10px;margin-bottom:9px;}
+  .bm .name{flex:1;font-size:13px;font-weight:600;}
+  .bm .best{font-size:12px;color:var(--accent);font-weight:700;margin-right:6px;white-space:nowrap;}
+  .bm input{width:88px;background:var(--panel2);border:1px solid var(--border);border-radius:9px;color:var(--text);padding:8px;font-size:14px;}
+  .bm .add{background:var(--p1);color:#0d1117;border-radius:9px;padding:8px 11px;font-weight:800;font-size:13px;}
+  .hist{font-size:11px;color:var(--muted2);margin:-2px 0 12px 2px;line-height:1.5;}
+  .setting{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);}
+  .setting:last-child{border-bottom:none;}
+  .setting .t{font-size:13.5px;font-weight:600;}
+  .setting .s{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4;}
+  .sbtn{background:var(--panel2);border:1px solid var(--border);border-radius:9px;padding:9px 13px;font-size:12.5px;font-weight:700;white-space:nowrap;}
+  .note{font-size:11.5px;color:var(--muted);line-height:1.5;margin-top:10px;}
+  .hidden{display:none!important;}
+  .toast{position:fixed;left:50%;bottom:calc(96px + var(--safe-b));transform:translateX(-50%) translateY(20px);
+    background:var(--panel3);border:1px solid var(--border);color:var(--text);padding:10px 16px;border-radius:24px;
+    font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:80;pointer-events:none;white-space:nowrap;}
+  .toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+  textarea.io{width:100%;min-height:120px;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px;font-size:12px;font-family:ui-monospace,monospace;margin-top:8px;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="logo">
+      <div class="mark">R</div>
+      <div><b>HYROX Trainer</b><span>Chicago · Navy Pier · Feb 11 '27</span></div>
+    </div>
+    <div class="countdown"><div class="n mono" id="cd">—</div><div class="l">days out</div></div>
+  </div>
+  <div class="spinelbl"><span>Bridge</span><span>Base</span><span>Str-End</span><span>Specific</span><span>Race</span></div>
+  <div class="spine" id="spine"></div>
+</header>
+
+<div class="weekstrip" id="weekstrip"></div>
+
+<main>
+  <div id="view-train"></div>
+  <div id="view-tests" class="hidden"></div>
+  <div id="view-course" class="hidden"></div>
+  <div id="view-fuel" class="hidden"></div>
+  <div id="view-more" class="hidden"></div>
+</main>
+
+<button class="fab" id="fab" aria-label="Timers">
+  <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>
+</button>
+
+<nav id="nav">
+  <button data-tab="train" class="on"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>Train</button>
+  <button data-tab="tests"><svg viewBox="0 0 24 24"><path d="M4 19V5m5 14V9m5 10V4m5 15v-7"/></svg>Tests</button>
+  <button data-tab="course"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="7" cy="6" r="0.1"/></svg>Course</button>
+  <button data-tab="fuel"><svg viewBox="0 0 24 24"><path d="M6 3v6a3 3 0 006 0V3M9 3v18M16 3c-1.5 1-2 3-2 6s.5 5 2 6v6"/></svg>Fuel</button>
+  <button data-tab="more"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg>More</button>
+</nav>
+
+<!-- Timer sheet -->
+<div class="sheet-wrap" id="timerSheet">
+  <div class="scrim" data-close></div>
+  <div class="sheet">
+    <div class="grab"></div>
+    <div class="segpick" id="tmode">
+      <button data-m="stop" class="on">Stopwatch</button>
+      <button data-m="rest">Rest</button>
+      <button data-m="interval">Interval</button>
+    </div>
+    <div class="clock mono" id="clock">00:00</div>
+    <div class="phaselbl" id="tphase"></div>
+    <div id="tconfig"></div>
+    <div class="rowbtns" style="margin-top:6px">
+      <button class="btn" id="tStartStop">Start</button>
+      <button class="btn ghostbtn" id="tReset">Reset</button>
+      <button class="btn ghostbtn" id="tLap" style="display:none">Lap</button>
+    </div>
+    <div class="laps" id="laps"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ============ DATA MODEL ============ */
+const RACE = new Date("2027-02-11T08:00:00-06:00");
+const PH = {
+  bridge:{name:"Transition Bridge",color:"var(--bridge)",hex:"#5b8fb0"},
+  p1:{name:"Phase 1 · Aerobic Base",color:"var(--p1)",hex:"#33b3a6"},
+  p2:{name:"Phase 2 · Strength-Endurance",color:"var(--p2)",hex:"#e0b341"},
+  p3:{name:"Phase 3 · Race Specificity",color:"var(--p3)",hex:"#e8792e"},
+  p4:{name:"Phase 4 · Sharpen & Taper",color:"var(--p4)",hex:"#e5484d"}
+};
+const SEGMAP=[["bridge",1],["p1",4],["p2",4],["p3",5],["p4",3]];
+
+// reusable field sets
+const F={
+  easy:[{k:"dist",l:"Dist (km)"},{k:"time",l:"Time"},{k:"rpe",l:"RPE /10"}],
+  long:[{k:"dist",l:"Dist (km)"},{k:"time",l:"Time"},{k:"pace",l:"Avg pace"}],
+  int:[{k:"reps",l:"Reps done"},{k:"split",l:"Avg split"},{k:"rpe",l:"RPE /10"}],
+  str:[{k:"load",l:"Top sets / loads"}],
+  station:[{k:"rounds",l:"Rounds"},{k:"load",l:"Weight"},{k:"time",l:"Time / notes"}],
+  hybrid:[{k:"rounds",l:"Rounds"},{k:"time",l:"Total time"},{k:"rpe",l:"RPE /10"}],
+  sim:[{k:"time",l:"TOTAL TIME"},{k:"splits",l:"Run/station splits"}],
+  none:[]
+};
+
+// day templates per phase (weekly structure). detail may be fn(w)
+function tmpl(phase){
+  const P1=[
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — lower / pull",
+      d:"Heavy, crisp, low volume — protect the base, don't chase fatigue.\n• Back or Front Squat 4×4–5 @ ~80%\n• Trap-bar DL or RDL 3×5\n• Weighted split squat / step-up 3×8/leg\n• Pull-ups or heavy row 4×6\n• Loaded carry + hard core\nOptional: 15-min easy shakeout jog after.",f:F.str},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + erg technique",
+      d:"• 30–40 min easy Zone 2 (conversational — go slower than feels good)\n• Then Ski + Row TECHNIQUE: long powerful strokes, row 26–30 spm, big legs→hips→arms.\nForm over effort today.",f:F.easy},
+    {dn:"Wed",tag:"Run · Intervals",type:"int",g:"int",t:w=>"Run intervals — "+w.sig,
+      d:w=>"• "+w.sig+"\nThe seconds listed (e.g. \"90s jog\") are your easy recovery BETWEEN reps — not the rep time. Warm up + cool down 10 min each. Add a couple of 180° turnarounds to mimic the looped course.",f:F.int},
+    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — push / power",
+      d:"• Front or Box Squat 4×5\n• Overhead Press 4×5\n• Hip thrust / hinge 3×8\n• DB bench or push press 4×6\n• Keep 2–3 sets jumps or med-ball throws (protect D-10 power)\n• Core",f:F.str},
+    {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",
+      d:"Full rest or 20–30 min mobility. Calves, ankles, hips as mileage climbs.",f:F.none},
+    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:w=>"Long run — "+w.long+" km Z2",
+      d:w=>"• "+w.long+" km easy Zone 2. Treadmill at 0–1% is fine (flat & indoor = race-specific).\nLast 10–15 min can drift slightly firmer.",f:F.long},
+    {dn:"Sun",tag:"Stations",type:"station",g:"circuit",t:"Station circuit (moderate)",
+      d:"Familiarity + quality reps, not a grind:\n• Sled push 3×12.5m\n• Sled pull 3×12.5m\n• Farmers 3×50m\n• Sandbag lunges 3×25m\n• Wall balls 3×20\nModerate loads. Or take a second rest day if legs are cooked.",f:F.station}
+  ];
+  const P2=[
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — heavier lower",
+      d:"• Squat 4×4 @ ~82–85%\n• Deadlift / RDL 3×4\n• Split squat 3×8/leg\n• Weighted pull-up or row 4×6\n• Core",f:F.str},
+    {dn:"Tue",tag:"Run · Tempo",type:"int",g:"tempo",t:w=>"Threshold / tempo — "+w.sig,
+      d:w=>"• "+w.sig+" — comfortably-hard, ~15–20s/km slower than 5k pace. Any seconds listed are easy jog between blocks.\n• + hard core finisher\nBuilds the ability to hold pace as lactate climbs.",f:F.int},
+    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Station strength-endurance @ race wt",
+      d:"Race weight (train sled ~10% heavier than Open so race feels light):\n• Sled push 4×12.5m @ 152kg+\n• Sled pull 4×12.5m @ 103kg+\n• Farmers 4×50m @ 2×24kg\n• Sandbag lunges 4×25m @ 20kg\n• Wall balls 4×25\nShorter rest as weeks progress.",f:F.station},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + erg intervals",
+      d:"• 30 min easy Z2\n• Erg: 4–6×500m hard (Ski or Row) w/ 1 min. Long strokes, pace by feel.",f:F.easy},
+    {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest or light mobility.",f:F.none},
+    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:w=>"Long run — "+w.long+" km",
+      d:w=>"• "+w.long+" km Zone 2. Fuel it if >75 min.",f:F.long},
+    {dn:"Sun",tag:"Hybrid",type:"hybrid",g:"hybrid",t:w=>w.sunSig||"Hybrid / compromised",
+      d:w=>w.sunDetail||"Compromised running — running well on trashed legs:\n• 4–6 rounds: 800m–1km run + one station at race weight, short rest.",f:w=>w.simSun?F.sim:F.hybrid}
+  ];
+  const P3=[
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength — strength-endurance shift",
+      d:"Trim pure max work, add density:\n• Squat 4×4 (maintain)\n• Trap-bar carry complex\n• Walking lunges loaded 3×20m\n• Push press 4×5\n• Core. Keep it heavy enough to hold strength, no grinders.",f:F.str},
+    {dn:"Tue",tag:"Run · Race pace",type:"int",g:"racepace",t:w=>"HYROX-pace intervals — "+w.sig,
+      d:w=>"• "+w.sig+"\nRun each rep at GOAL RACE PACE; the seconds after are easy jog recovery between reps. Teach the legs what sustainable feels like — your worst race split should be Run 5–6, never 7–8.",f:F.int},
+    {dn:"Wed",tag:"Compromised",type:"hybrid",g:"hybrid",t:w=>w.wedSig||"Compromised combos @ race weight",
+      d:w=>w.wedDetail||"Run→station→run in race order, race weights, minimal rest. The money session.",f:F.hybrid},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + short erg (or rest)",
+      d:"• 25–35 min easy Z2 + 3×500m erg\nSwap for full rest if recovery is lagging — auto-regulate in peak weeks.",f:F.easy},
+    {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Full rest. Sleep is the session.",f:F.none},
+    {dn:"Sat",tag:"Long / Sim",type:"sim",g:"long",t:w=>w.satSig||("Long run — "+w.long+" km"),
+      d:w=>w.satDetail||("• "+w.long+" km Zone 2."),f:w=>w.satSim?F.sim:F.long},
+    {dn:"Sun",tag:"Hybrid",type:"hybrid",g:"hybrid2",t:"Second hybrid / station volume",
+      d:"Lighter than Wed: station volume or an easy compromised circuit. Recovery if the sim was Saturday.",f:F.hybrid}
+  ];
+  if(phase==="p1")return P1;
+  if(phase==="p2")return P2;
+  if(phase==="p3")return P3;
+  return P1;
+}
+
+// Bridge + Phase 4 authored explicitly
+const BRIDGE=[
+  {label:"Bridge · Week 1",sub:"Recovery — the week right after your D-10 peak / test",km:"~8",days:[
+    {dn:"Mon",tag:"Recovery",type:"none",g:"",t:"Full rest + mobility",d:"Sleep is the priority coming off your D-10 peak. 10–15 min easy mobility if you want to move — nothing more.",f:F.none},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Very easy jog — 20 min Z2",d:"Deliberately slow and conversational. This is the first gentle nudge from power work toward aerobic — a shake-out, not a workout.",f:F.easy},
+    {dn:"Wed",tag:"Recovery",type:"none",g:"",t:"Rest or 20–30 min walk",d:"Walk + mobility. Keep blood moving, zero intensity.",f:F.none},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Very easy jog — 25 min Z2",d:"Same easy effort. Add 4×15s relaxed strides at the end if the legs feel good.",f:F.easy},
+    {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Full rest.",f:F.none},
+    {dn:"Sat",tag:"Strength",type:"str",g:"strA",t:"Light full-body maintenance",d:"One easy full-body session at ~60–70%:\n• Squat 3×5 (light)\n• Hinge 3×5\n• Press 3×6\n• Row/pull-up 3×8\nJust holding the base while you recover. Skip it if you'd rather stay fully rested.",f:F.str},
+    {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest. You're ready to start building next week.",f:F.none}
+  ]},
+  {label:"Bridge · Week 2",sub:"Aerobic re-entry begins",km:"~12",days:[
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body maintenance",d:"Moderate load, lower volume than D-10:\n• Squat 3×5\n• Hinge (RDL/DL) 3×5\n• Press 3×6\n• Row / pull-up 3×8\n• Core. Keep 2 sets of jumps or med-ball throws to hold your power.",f:F.str},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 25 min Z2",d:"Conversational pace, nose-breathing-ish. Slower than feels satisfying — that's the point.",f:F.easy},
+    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg technique + easy jog",d:"• 15 min easy jog\n• SkiErg + Row TECHNIQUE: long, powerful strokes at 26–30 spm. 4×250m each, relaxed — focus on the stroke, not speed.",f:F.station},
+    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body maintenance",d:"• Front / Box squat 3×5\n• Overhead press 3×5\n• Hip thrust 3×8\n• DB bench or push press 3×6\n• Core.",f:F.str},
+    {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest or light mobility.",f:F.none},
+    {dn:"Sat",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 30 min Z2",d:"Your slightly longer run this week. Still fully easy.",f:F.easy},
+    {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest or 20 min walk",d:"Optional easy walk. No running.",f:F.none}
+  ]},
+  {label:"Bridge · Week 3",sub:"Build easy volume + start the stations",km:"~16",days:[
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body",d:"As Week 2; nudge loads up slightly if the sets feel crisp. Squat / hinge / press / pull + core.",f:F.str},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 30–35 min Z2 + strides",d:"Conversational, then 4×15s relaxed strides at the end.",f:F.easy},
+    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg intervals + wall-ball form",d:"• Ski 4×300m, Row 4×300m — smooth, moderate, long strokes\n• Wall balls 3×15 to the 10 ft target — groove the rhythm, keep it light.",f:F.station},
+    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body",d:"Squat / press / hinge / push + core. Moderate.",f:F.str},
+    {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest.",f:F.none},
+    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"First long run — 6 km easy Z2",d:"Your first 'long' one. Keep it fully conversational; treadmill at 0–1% is fine (flat & indoor = race-specific).",f:F.long},
+    {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest or 20 min walk",d:"Easy walk or rest.",f:F.none}
+  ]},
+  {label:"Bridge · Week 4",sub:"Steady base + station familiarization",km:"~20",days:[
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body",d:"Squat / hinge / press / pull + core, moderate.",f:F.str},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 35 min Z2 + strides",d:"35 min easy + 4–6×15s strides (gentle turnover, not sprints).",f:F.easy},
+    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Station familiarization — all 8 movements",d:"Learn the movements & transitions, don't grind:\n• Sled push 4×12.5m (moderate)\n• Sled pull 4×12.5m\n• Farmers 3×40m\n• Sandbag lunge 3×20m\n• Wall balls 3×20\n• Burpee broad jumps 2×10m",f:F.station},
+    {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body",d:"Moderate full-body + core.",f:F.str},
+    {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest.",f:F.none},
+    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 7 km easy Z2",d:"Easy and conversational. Fuel lightly if it runs long.",f:F.long},
+    {dn:"Sun",tag:"Run · Easy",type:"easy",g:"easy",t:"Optional easy 25 min jog",d:"Very easy shakeout, or rest if the legs are cooked.",f:F.easy}
+  ]},
+  {label:"Bridge · Week 5",sub:"Set your baselines, then hand off to Week 1",km:"~18 + tests",days:[
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — lighter (testing this week)",d:"Trim the volume so you're fresh for the tests. Moderate load, crisp sets.",f:F.str},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 25 min + strides",d:"Shakeout + 4×20s strides. Keep it light before tomorrow's test.",f:F.easy},
+    {dn:"Wed",tag:"Benchmark",type:"none",g:"",t:"TEST 1 — 5 km time trial",d:"Warm up well (15 min easy + a few strides), then run a hard, even 5 km. This sets your easy / threshold / interval paces for the whole plan. Log it in the Tests tab.",f:F.none},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 25–30 min + erg technique",d:"Easy Z2 to flush the legs + a few relaxed Ski/Row pieces. No hard efforts.",f:F.none},
+    {dn:"Fri",tag:"Benchmark",type:"none",g:"",t:"TEST 2 — ergs, wall balls & 1 km feel",d:"After a warm-up, log each in the Tests tab:\n• 500m SkiErg for time\n• 500m Row for time\n• Max unbroken wall balls\n• 1 km at 'HYROX pace' (≈ your 5k pace + 15–20s/km) — note how it feels; this is your goal race-run pace.",f:F.none},
+    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 8 km easy Z2",d:"Last bridge run. Comfortable and easy. Week 1 starts Monday.",f:F.long},
+    {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest — ready for Week 1",d:"Full rest. Base built, paces set, stations learned. Phase 1 begins tomorrow.",f:F.none}
+  ]}
+];
+function bridgeFlat(){return BRIDGE.reduce((a,w)=>a.concat(w.days),[]);}
+const P4_WEEKS={
+  14:[
+    {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Light strength (crisp)",d:"Low volume, moderate load. Movement, not fatigue.",f:F.str},
+    {dn:"Tue",tag:"Run · Race pace",type:"int",g:"racepace",t:"Sharp — 4×1 km @ race pace",d:"4×1km at goal race pace, 90s easy jog recovery between reps. Feel fast and smooth.",f:F.int},
+    {dn:"Wed",tag:"Compromised",type:"hybrid",g:"hybrid",t:"Short compromised touch",d:"3×(800m run + 1 station @ race wt). Quality, not volume.",f:F.hybrid},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides",d:"25–30 min easy + 4–6×20s strides.",f:F.easy},
+    {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Rest.",f:F.none},
+    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 10 km",d:"Last longer run. Comfortable Z2.",f:F.long},
+    {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest. Volume is now draining out; sharpness stays.",f:F.none}
+  ],
+  15:[
+    {dn:"Mon",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides",d:"30 min easy + 4×20s strides.",f:F.easy},
+    {dn:"Tue",tag:"Primer",type:"hybrid",g:"hybrid",t:"Short primer — 3×(500m + station)",d:"3 rounds: 500m run + one light station. Sharp and short.",f:F.hybrid},
+    {dn:"Wed",tag:"Strength",type:"str",g:"strA",t:"Low-volume feel-good lift",d:"A few crisp sets, moderate load. Nothing sore.",f:F.str},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 30 min",d:"Easy shakeout.",f:F.easy},
+    {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Rest.",f:F.none},
+    {dn:"Sat",tag:"Run · Easy",type:"long",g:"long",t:"Easy 8 km + strides",d:"8 km easy + 4×20s strides. Legs turning over, tank full.",f:F.long},
+    {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Rest.",f:F.none}
+  ],
+  16:[
+    {dn:"Mon",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides + few wall balls",d:"20–25 min easy + strides + 2×15 wall balls to prime.",f:F.easy},
+    {dn:"Tue",tag:"Openers",type:"hybrid",g:"",t:"Openers — prime the system",d:"4×200m @ race pace + a handful of reps on Ski, Row, and wall balls. In and out — wakes the body without fatiguing it.",f:F.none},
+    {dn:"Wed",tag:"Recovery",type:"none",g:"",t:"Full rest · travel · walkthrough",d:"Rest. Travel to Navy Pier. Light course walkthrough, register, lay out kit. Carbs up, hydrate w/ electrolytes.",f:F.none},
+    {dn:"Thu",tag:"RACE",type:"sim",g:"",t:"🏁 RACE DAY — HYROX Chicago",d:"Wave 08:00–10:00. Pace Run 1 EASY. Jog every Roxzone. Break wall balls from rep 1 (25-25-25-25). Cross-trainers, pace on your wrist. Finish strong — log your time here.",f:F.sim}
+  ]
+};
+
+// week-by-week meta
+const WMETA=[
+  {id:0,label:"Bridge",date:"now → Oct 25",phase:"bridge",theme:"Re-entry",runKm:"10→18",long:"6–8",deload:false,sig:"Easy Z2 + erg technique"},
+  {id:1,label:"W1",date:"Oct 26",phase:"p1",theme:"Aerobic Base",runKm:"~20",long:8,deload:false,sig:"6×800m @ 5k pace, 90s jog recovery"},
+  {id:2,label:"W2",date:"Nov 2",phase:"p1",theme:"Aerobic Base",runKm:"~24",long:9,deload:false,sig:"8×400m faster than 5k pace, 75s jog recovery"},
+  {id:3,label:"W3",date:"Nov 9",phase:"p1",theme:"Aerobic Base",runKm:"~28",long:11,deload:false,sig:"5×1km @ threshold, 60s jog recovery"},
+  {id:4,label:"W4",date:"Nov 16",phase:"p1",theme:"Base · DELOAD",runKm:"~18",long:8,deload:true,sig:"Short intervals + station skills"},
+  {id:5,label:"W5",date:"Nov 23",phase:"p2",theme:"Strength-Endurance",runKm:"~26",long:11,deload:false,sig:"20 min continuous tempo",
+    sunSig:"Compromised intro — 4×(1km + station)",sunDetail:"Compromised running, easy weights, short rest:\n• 4 rounds: 1km run + one station (rotate ski/sled/burpee/wall balls)."},
+  {id:6,label:"W6",date:"Nov 30",phase:"p2",theme:"Strength-Endurance",runKm:"~30",long:12,deload:false,sig:"3×8 min tempo, 90s jog between blocks",
+    sunSig:"Compromised — 5×(1km + station)",sunDetail:"5 rounds: 1km run + one station @ race weight, short rest."},
+  {id:7,label:"W7",date:"Dec 7",phase:"p2",theme:"Str-End · TEST",runKm:"~34",long:14,deload:false,sig:"4×6 min tempo, 90s jog between blocks",
+    sunSig:"⏱ HALF-SIMULATION — time it",simSun:true,sunDetail:"HALF-SIM: 4×(1km + station), first four stations (Ski→Sled Push→Sled Pull→Burpee BJ), race weights. Time the total & log it in Tests."},
+  {id:8,label:"W8",date:"Dec 14",phase:"p2",theme:"Str-End · DELOAD",runKm:"~22",long:9,deload:true,sig:"Easy runs + short openers",
+    sunSig:"Easy station skills",sunDetail:"Light technique work only — deload week."},
+  {id:9,label:"W9",date:"Dec 21",phase:"p3",theme:"Race Specificity",runKm:"~30",long:12,deload:false,sig:"5×1km @ race pace, 90s jog recovery",
+    wedSig:"Compromised — 5×(1km + station)",wedDetail:"5 rounds race order: 1km run + station @ race weight, jog transitions."},
+  {id:10,label:"W10",date:"Dec 28",phase:"p3",theme:"Race Specificity",runKm:"~34",long:13,deload:false,sig:"6×1km @ race pace, 75s jog recovery",
+    wedSig:"Compromised — 6×(1km + station)",wedDetail:"6 rounds race order, race weights, minimal rest."},
+  {id:11,label:"W11",date:"Jan 4",phase:"p3",theme:"Specific · MINI-DELOAD",runKm:"~28",long:10,deload:true,sig:"4×1km @ race pace, 90s jog recovery",
+    wedSig:"Easy compromised (deload)",wedDetail:"Reduced volume — 3×(1km + light station).",
+    satSig:"⏱ ~75% SIMULATION",satSim:true,satDetail:"6 stations in race order + runs, race weights. Practice transitions — jog every Roxzone. Log total in Tests."},
+  {id:12,label:"W12",date:"Jan 11",phase:"p3",theme:"Race Specificity",runKm:"~36 (peak)",long:14,deload:false,sig:"5×1km @ race pace + 2×400 fast, 90s recovery",
+    wedSig:"Compromised — race weights",wedDetail:"6–7 rounds race order at race weight. Peak specific session."},
+  {id:13,label:"W13",date:"Jan 18",phase:"p3",theme:"Specific · DRESS REHEARSAL",runKm:"~32",long:12,deload:false,sig:"4×1km @ race pace (sharp), 90s jog recovery",
+    wedSig:"Short compromised primer",wedDetail:"3×(1km + station) — keep it crisp before Saturday's sim.",
+    satSig:"⏱ NEAR-FULL SIMULATION (~3 wks out)",satSim:true,satDetail:"All 8 (or 8 runs + 6–8 stations), race weights, race pacing. Your dress rehearsal — taper begins after this. Log total in Tests."}
+];
+
+/* ============ STATE / STORAGE ============ */
+const KEY="hyrox_v1";
+let store=load();
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return {}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
+function sget(k,def){return store[k]===undefined?def:store[k]}
+function sset(k,v){store[k]=v;save()}
+
+let curWeek = sget("curWeek", weekNow());
+let curTab = "train";
+
+function weekNow(){
+  const start=new Date("2026-10-26T00:00:00-05:00");
+  const now=new Date();
+  if(now<start)return 0;
+  const w=Math.floor((now-start)/(7*864e5))+1;
+  return Math.max(0,Math.min(16,w));
+}
+
+/* ============ ASSEMBLE WEEK ============ */
+function daysFor(w){
+  if(w.phase==="bridge")return bridgeFlat();
+  if(w.phase==="p4")return P4_WEEKS[w.id];
+  const base=tmpl(w.phase);
+  return base.map(d=>({
+    dn:d.dn,tag:d.tag,type:d.type,g:d.g,
+    t:typeof d.t==="function"?d.t(w):d.t,
+    d:typeof d.d==="function"?d.d(w):d.d,
+    f:typeof d.f==="function"?d.f(w):d.f
+  }));
+}
+function metaFor(id){
+  if(id>=14)return {id,label:"W"+id,date:["Jan 25","Feb 1","Feb 8"][id-14],phase:"p4",
+    theme:id===16?"RACE WEEK":"Sharpen & Taper",runKm:["~26","~18","~8 + race"][id-14],
+    long:[10,8,"—"][id-14],deload:id>14,sig:""};
+  return WMETA[id];
+}
+
+/* ============ RENDER: header spine + weekstrip ============ */
+function renderSpine(){
+  const el=document.getElementById("spine");el.innerHTML="";
+  let idx=0;
+  SEGMAP.forEach(([pk,cnt])=>{
+    for(let i=0;i<cnt;i++){
+      const wid=idx;
+      const seg=document.createElement("div");
+      seg.className="seg"+(wid<=curWeek?" on":"");
+      const fill=wid<curWeek?1:(wid===curWeek?0.5:0);
+      seg.innerHTML='<i style="background:'+PH[pk].color+';transform:scaleX('+fill+')"></i>';
+      el.appendChild(seg);idx++;
+    }
+  });
+}
+function renderStrip(){
+  const el=document.getElementById("weekstrip");el.innerHTML="";
+  for(let i=0;i<=16;i++){
+    const m=metaFor(i);
+    const done=weekDone(i);
+    const b=document.createElement("button");
+    b.className="wk"+(i===curWeek?" active":"")+(done?" done":"");
+    b.style.setProperty("--ph",PH[m.phase].color);
+    b.innerHTML='<div class="t">'+(i===0?"Bridge":"Wk")+'</div><div class="d">'+(i===0?"·":i)+
+      '</div><div class="dot"></div>';
+    b.onclick=()=>{curWeek=i;sset("curWeek",i);renderAll();
+      const mn=document.querySelector("main");if(mn&&mn.scrollIntoView)mn.scrollIntoView({behavior:"smooth",block:"start"});};
+    el.appendChild(b);
+  }
+  const active=el.children[curWeek];
+  if(active&&active.scrollIntoView)active.scrollIntoView({inline:"center",block:"nearest"});
+}
+function weekDone(id){
+  const m=metaFor(id),days=daysFor(m);
+  const train=days.filter(d=>d.type!=="none").length;
+  if(!train)return false;
+  let c=0;days.forEach((d,i)=>{if(d.type!=="none"&&sget("done_"+id+"_"+i,false))c++;});
+  return c>=train;
+}
+
+/* ============ RENDER: train view ============ */
+function readKey(){
+  return '<details class="readkey"><summary>How to read the plan</summary><div class="rk">'+
+    '<p><b>Intervals:</b> the pace applies to each rep; the seconds after it are your <b>easy jog recovery between reps</b>. "6×800m @ 5k pace, 90s jog" = run 800m at 5k pace, jog 90s easy, repeat ×6.</p>'+
+    '<p><b>Z2 / easy:</b> conversational pace you could hold a chat at — most of your running lives here.</p>'+
+    '<p><b>Race pace:</b> the goal pace you can hold across all 8 race runs (≈ your 5k pace + 15–20s/km for a first race).</p>'+
+    '<p><b>Tap any day</b> to open the full session, log it, and see your last values. The red button (bottom-right) = timers.</p>'+
+    '</div></details>';
+}
+function renderTrain(){
+  const m=metaFor(curWeek),days=daysFor(m);
+  document.documentElement.style.setProperty("--ph",PH[m.phase].color);
+  let h=readKey();
+  if(curWeek===0){
+    h+='<div class="weekhead" style="--ph:'+PH.bridge.color+'">'+
+       '<div class="phase">'+PH.bridge.name+'</div>'+
+       '<h2>Do this first — before Week 1</h2>'+
+       '<div class="sub">~5 weeks · mid-Sep → Oct 25 · your on-ramp off D-10</div>'+
+       '<div class="sigline">This block is <b>separate from Weeks 1–4</b>. Finish D-10, then work through Bridge Weeks 1–5 below: rebuild easy running, relearn the ergs & stations, and set your baseline tests — so Week 1 starts from a real base, not from zero.</div>'+
+       '</div>';
+    let idx=0;
+    BRIDGE.forEach(sw=>{
+      h+='<div class="subhead"><span class="l">'+sw.label+'</span><span class="k">'+sw.sub+'<br>'+sw.km+' km</span></div>';
+      sw.days.forEach(d=>{h+=dayCard(d,idx);idx++;});
+    });
+    document.getElementById("view-train").innerHTML=h;
+    return;
+  }
+  h+='<div class="weekhead" style="--ph:'+PH[m.phase].color+'">';
+  h+='<div class="phase">'+PH[m.phase].name+'</div>';
+  h+='<h2>Week '+curWeek+" — "+m.theme+'</h2>';
+  h+='<div class="sub">'+m.date+(curWeek===16?" · Race Thursday":"")+'</div>';
+  h+='<div class="stats"><div class="stat"><div class="k">Run volume</div><div class="v">'+m.runKm+' km</div></div>'+
+     '<div class="stat"><div class="k">Long run</div><div class="v">'+m.long+(m.long==="—"?"":" km")+'</div></div>'+
+     '<div class="stat"><div class="k">Days</div><div class="v">'+days.filter(d=>d.type!=="none").length+'</div></div></div>';
+  if(m.deload)h+='<div class="deloadtag">DELOAD — cut volume ~40–50%, keep the movements, drop intensity</div>';
+  if(m.sig&&curWeek<14)h+='<div class="sigline">Signature session: <b>'+m.sig+'</b></div>';
+  h+='</div>';
+  days.forEach((d,i)=>{h+=dayCard(d,i);});
+  document.getElementById("view-train").innerHTML=h;
+  days.forEach((d,i)=>bindDay(d,i));
+}
+function tagColor(tag){
+  if(/Strength/.test(tag))return "#8a6bd8";
+  if(/Long/.test(tag))return "#3fb0a3";
+  if(/Interval|Race pace|Tempo/.test(tag))return "#e8792e";
+  if(/Easy|Primer|Openers/.test(tag))return "#5b8fb0";
+  if(/Stations|Compromised|Hybrid/.test(tag))return "#e0b341";
+  if(/RACE/.test(tag))return "#e5484d";
+  if(/Benchmark|TEST/.test(tag))return "#f5b942";
+  return "#6b7686";
+}
+function dayCard(d,i){
+  const done=sget("done_"+curWeek+"_"+i,false);
+  const isOpen=false;
+  let h='<div class="day" id="day'+i+'">';
+  h+='<button class="dayhead" onclick="toggleDay('+i+')">';
+  h+='<span class="check'+(done?" on":"")+'" id="chk'+i+'" onclick="event.stopPropagation();toggleDone('+i+')"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>';
+  h+='<span class="daymeta"><span class="dn">'+d.dn+'</span><span class="dt">'+d.t+'</span></span>';
+  h+='<span class="tag" style="background:'+tagColor(d.tag)+'22;color:'+tagColor(d.tag)+'">'+d.tag+'</span>';
+  h+='<svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg>';
+  h+='</button>';
+  h+='<div class="daybody">';
+  h+='<div class="detail">'+d.d+'</div>';
+  if(d.f&&d.f.length){
+    h+='<div class="fields">';
+    d.f.forEach(f=>{
+      const val=sget("log_"+curWeek+"_"+i+"_"+f.k,"");
+      const gh=ghost(d.g,f.k);
+      const full=(f.k==="splits"||f.k==="load"||f.k==="time"&&d.type==="sim")?" full":"";
+      h+='<div class="field'+full+'"><label>'+f.l+'</label>'+
+         '<input inputmode="'+(/dist|reps|rpe|rounds/.test(f.k)?"decimal":"text")+'" value="'+esc(val)+'" '+
+         'placeholder="'+(gh?"prev: "+esc(gh):"—")+'" onchange="logField('+i+',\''+f.k+'\',this.value)">'+
+         (gh?'<div class="ghost">last: <b>'+esc(gh)+'</b></div>':'')+'</div>';
+    });
+    h+='</div>';
+  }
+  h+='<div class="field full"><label>Notes</label><textarea placeholder="How did it feel? Loads, splits, anything to remember…" onchange="logField('+i+',\'note\',this.value)">'+esc(sget("log_"+curWeek+"_"+i+"_note",""))+'</textarea></div>';
+  h+='<div class="rowbtns"><button class="btn primary" onclick="toggleDone('+i+')">'+(done?"✓ Logged — undo":"Mark done")+'</button>'+
+     '<button class="btn ghostbtn" onclick="openTimer()">Timer</button></div>';
+  h+='</div></div>';
+  return h;
+}
+function bindDay(){}
+function ghost(g,k){
+  if(!g)return "";
+  for(let w=curWeek-1;w>=0;w--){
+    const m=metaFor(w),days=daysFor(m);
+    for(let i=0;i<days.length;i++){
+      if(days[i].g===g){
+        const v=sget("log_"+w+"_"+i+"_"+k,"");
+        if(v)return v;
+      }
+    }
+  }
+  return "";
+}
+window.toggleDay=function(i){document.getElementById("day"+i).classList.toggle("open");};
+window.toggleDone=function(i){
+  const cur=sget("done_"+curWeek+"_"+i,false);
+  sset("done_"+curWeek+"_"+i,!cur);
+  renderTrain();renderStrip();renderSpine();
+  if(!cur)toast("Logged ✓");
+};
+window.logField=function(i,k,v){sset("log_"+curWeek+"_"+i+"_"+k,v);};
+
+/* ============ TESTS ============ */
+const TESTS=[
+  {k:"tt5k",n:"5 km time trial",u:"",lower:true},
+  {k:"km1",n:"1 km HYROX pace",u:"",lower:true},
+  {k:"ski500",n:"500 m SkiErg",u:"",lower:true},
+  {k:"row500",n:"500 m Row",u:"",lower:true},
+  {k:"wb",n:"Max unbroken wall balls",u:"reps",lower:false},
+  {k:"sim",n:"Simulation total time",u:"",lower:true}
+];
+function renderTests(){
+  let h='<div class="card"><h3>Benchmarks <span class="pill">retest: bridge · W8 · W13</span></h3>'+
+    '<p>Log the same tests over the block. Watching these move is your proof the engine is coming — and they set every pace in the plan.</p></div>';
+  TESTS.forEach(t=>{
+    const hist=sget("bm_"+t.k,[]);
+    const best=bestOf(hist,t.lower);
+    h+='<div class="card"><div class="bm"><span class="name">'+t.n+'</span>'+
+       (best!==null?'<span class="best">'+(t.lower?"best ":"PR ")+esc(best)+(t.u?" "+t.u:"")+'</span>':'')+
+       '<input id="bmi_'+t.k+'" placeholder="'+(t.u||"mm:ss")+'"><button class="add" onclick="addBm(\''+t.k+'\')">Log</button></div>';
+    if(hist.length)h+='<div class="hist">'+hist.slice().reverse().map(e=>e.d+': <b style="color:var(--text)">'+esc(e.v)+'</b>').join(' · ')+'</div>';
+    h+='</div>';
+  });
+  document.getElementById("view-tests").innerHTML=h;
+}
+function bestOf(hist,lower){
+  if(!hist.length)return null;
+  const nums=hist.map(e=>toSec(e.v));
+  if(nums.every(n=>n!==null)){
+    const b=lower?Math.min(...nums):Math.max(...nums);
+    const e=hist[nums.indexOf(b)];return e.v;
+  }
+  return hist[hist.length-1].v;
+}
+function toSec(v){
+  if(/^\d+(\.\d+)?$/.test(v))return parseFloat(v);
+  const m=v.match(/^(\d+):(\d{1,2})$/);if(m)return +m[1]*60+ +m[2];
+  return null;
+}
+window.addBm=function(k){
+  const inp=document.getElementById("bmi_"+k);const v=inp.value.trim();if(!v)return;
+  const hist=sget("bm_"+k,[]);
+  const d=new Date();const ds=(d.getMonth()+1)+"/"+d.getDate();
+  hist.push({d:ds,v:v});sset("bm_"+k,hist);inp.value="";renderTests();toast("Benchmark logged");
+};
+
+/* ============ COURSE (station reference) ============ */
+function renderCourse(){
+  document.getElementById("view-course").innerHTML=
+  '<div class="card"><h3>The course <span class="pill">Open · Men</span></h3>'+
+  '<p>Run 1 km → station, ×8. 8 km running + 8 stations, fixed order. Total time is your score.</p>'+
+  '<table class="ref">'+
+  row("1 · SkiErg","1000m","Don\'t redline early — it sets the tone. Smooth, long strokes.")+
+  row("2 · Sled Push","<span class=load>152kg</span> · 50m","Where most energy is wasted. Short 5–10m surges, 3–5s micro-rests, low body angle.")+
+  row("3 · Sled Pull","<span class=load>103kg</span> · 50m","Grip + back. Hand-over-hand, brace, use bodyweight to fall back.")+
+  row("4 · Burpee BJ","80m","Continuous & controlled, steady breath. Jump OUT not up. Your power = a strength here.")+
+  row("5 · Row","1000m","Recover breathing without losing time. ~26–30 spm, long pulls.")+
+  row("6 · Farmers","<span class=load>2×24kg</span> · 200m","Grip is the hidden limiter — go unbroken if you can.")+
+  row("7 · Sandbag Lunge","<span class=load>20kg</span> · 100m","Common late-race cramp spot. Steady rhythm, knee kisses floor.")+
+  row("8 · Wall Balls","<span class=load>6kg→3m</span> · 100","The finisher. NEVER unbroken — plan sets (25-25-25-25) from rep 1. Miss = 15s penalty.")+
+  '</table></div>'+
+  '<div class="card"><h3>Race-day rules of thumb</h3>'+
+  '<p>• <b>Run 1 should feel EASY.</b> Adrenaline lies — you\'ll be glad at station 6.</p>'+
+  '<p>• <b>Jog every Roxzone.</b> Walking transitions bleeds seconds you can\'t recover.</p>'+
+  '<p>• <b>Negative split.</b> Worst run split should be Run 5–6, never 7–8.</p>'+
+  '<p>• <b>Cross-trainers, not running shoes</b> — running shoes slip on the sled.</p>'+
+  '<p>• Write your run-pace target on your wrist. First race = process goals; PB is race #2.</p>'+
+  '<p class="note">✓ Confirmed: Open division · wall ball 6 kg to the 3 m (10 ft) target, 100 reps.</p>'+
+  '</div>';
+}
+function row(a,b){return '<tr><td>'+a+'</td><td>'+b+'</td></tr>';}
+
+/* ============ FUEL ============ */
+function renderFuel(){
+  document.getElementById("view-fuel").innerHTML=
+  '<div class="card"><h3>Fuel for the block <span class="pill">syncs to Food Buddy</span></h3>'+
+  '<p>HYROX runs a bigger engine than D-10 did — more total energy, and notably more <b>carbohydrate</b>. Periodize carbs to the day: high on long-run & sim days, moderate on strength days, lower on rest.</p></div>'+
+  '<div class="card"><h3>Daily targets</h3><table class="ref">'+
+  row("Protein","<span class=load>1.6–2.2 g/kg</span>","Hold lean mass through the volume. Keep this steady every day.")+
+  row("Carbs · High days","<span class=load>6–8 g/kg</span>","Long run, sims, hard compromised sessions.")+
+  row("Carbs · Moderate","<span class=load>4–6 g/kg</span>","Strength & easy-run days.")+
+  row("Carbs · Rest","<span class=load>3–4 g/kg</span>","Full rest days.")+
+  row("Fat","fills the rest","Don\'t crash it — supports hormones & recovery.")+
+  '</table><p class="note">Set your bodyweight in Food Buddy and it does the math. Higher training volume = raise total calories vs the old D-10 numbers.</p></div>'+
+  '<div class="card"><h3>Race week & morning</h3>'+
+  '<p>• Taper carbs slightly with volume, then top up in the final 2 days (~7 g/kg).</p>'+
+  '<p>• Race AM (wave 8–10): familiar carb-forward breakfast 2–3 hrs out, hydrate w/ electrolytes, small top-up ~30–45 min before.</p>'+
+  '<p>• Nothing new on race day — rehearse breakfast before your W13 simulation.</p></div>';
+}
+
+/* ============ MORE / settings ============ */
+function renderMore(){
+  document.getElementById("view-more").innerHTML=
+  '<div class="card"><h3>Save to your phone</h3>'+
+  '<p>In Safari: tap <b>Share</b> → <b>Add to Home Screen</b>. It opens full-screen like an app and your logs stay on this device.</p></div>'+
+  '<div class="card"><h3>Share this app</h3>'+
+  '<div class="setting"><div><div class="t">Send the link</div><div class="s">Friends get the full trainer — their logs stay private to their device.</div></div>'+
+  '<button class="sbtn" onclick="shareApp()">Share</button></div></div>'+
+  '<div class="card"><h3>Back up / move devices</h3>'+
+  '<div class="setting"><div><div class="t">Export my log</div><div class="s">Copies all your data as text — paste somewhere safe.</div></div><button class="sbtn" onclick="exportData()">Copy</button></div>'+
+  '<div class="setting"><div><div class="t">Import</div><div class="s">Paste an exported log to restore it here.</div></div><button class="sbtn" onclick="toggleIO()">Paste</button></div>'+
+  '<textarea class="io hidden" id="ioBox" placeholder="Paste exported data here, then tap Restore"></textarea>'+
+  '<div class="rowbtns hidden" id="ioBtns" style="margin-top:8px"><button class="btn primary" onclick="importData()">Restore</button></div></div>'+
+  '<div class="card"><h3>Reset</h3>'+
+  '<div class="setting"><div><div class="t">Clear all logs</div><div class="s">Wipes checkmarks, notes & benchmarks on this device. Can\'t be undone.</div></div>'+
+  '<button class="sbtn" style="color:var(--race)" onclick="wipe()">Clear</button></div></div>'+
+  '<div class="card"><h3>About</h3><p>16-week HYROX Chicago plan + transition bridge, built to carry your D-10 strength into a race engine. Program details live in your training doc; this app is the tracker.</p></div>';
+}
+window.shareApp=async function(){
+  const url=location.href.split("#")[0];
+  if(navigator.share){try{await navigator.share({title:"HYROX Trainer",text:"My HYROX Chicago '27 trainer",url});return;}catch(e){}}
+  try{await navigator.clipboard.writeText(url);toast("Link copied");}catch(e){toast("Copy this URL from the address bar");}
+};
+window.exportData=async function(){
+  const s=JSON.stringify(store);
+  try{await navigator.clipboard.writeText(s);toast("Log copied to clipboard");}
+  catch(e){const b=document.getElementById("ioBox");b.classList.remove("hidden");b.value=s;toast("Copy the text above");}
+};
+window.toggleIO=function(){document.getElementById("ioBox").classList.toggle("hidden");document.getElementById("ioBtns").classList.toggle("hidden");};
+window.importData=function(){
+  const v=document.getElementById("ioBox").value.trim();if(!v)return;
+  try{const o=JSON.parse(v);store=o;save();curWeek=sget("curWeek",weekNow());renderAll();toast("Log restored");}
+  catch(e){toast("Couldn't read that — check the text");}
+};
+window.wipe=function(){if(confirm("Clear all logs on this device? This can't be undone.")){store={};save();curWeek=weekNow();renderAll();toast("Cleared");}};
+
+/* ============ TIMERS ============ */
+let T={mode:"stop",running:false,ms:0,raf:null,last:0,laps:[],
+  restSet:90,intWork:60,intRest:90,intRounds:6,phase:"work",roundsLeft:0,ac:null};
+function beep(f,dur){
+  try{if(!T.ac)T.ac=new (window.AudioContext||window.webkitAudioContext)();
+    const o=T.ac.createOscillator(),g=T.ac.createGain();o.connect(g);g.connect(T.ac.destination);
+    o.frequency.value=f;o.type="sine";g.gain.setValueAtTime(0.001,T.ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.4,T.ac.currentTime+0.01);
+    g.gain.exponentialRampToValueAtTime(0.001,T.ac.currentTime+dur);
+    o.start();o.stop(T.ac.currentTime+dur);}catch(e){}
+}
+window.openTimer=function(){document.getElementById("timerSheet").classList.add("on");renderTimer();};
+function closeTimer(){document.getElementById("timerSheet").classList.remove("on");}
+document.getElementById("fab").onclick=window.openTimer;
+document.querySelectorAll("#timerSheet [data-close]").forEach(e=>e.onclick=closeTimer);
+document.querySelectorAll("#tmode button").forEach(b=>b.onclick=()=>{
+  stopTimer();T.mode=b.dataset.m;
+  document.querySelectorAll("#tmode button").forEach(x=>x.classList.toggle("on",x===b));
+  T.ms=0;T.laps=[];renderTimer();
+});
+function fmt(ms){const s=Math.max(0,ms)/1000;const m=Math.floor(s/60);const ss=Math.floor(s%60);
+  const cs=Math.floor((s*100)%100);
+  return String(m).padStart(2,"0")+":"+String(ss).padStart(2,"0")+(T.mode==="stop"?"."+String(cs).padStart(2,"0"):"");}
+function renderTimer(){
+  const cfg=document.getElementById("tconfig");
+  document.getElementById("tLap").style.display=T.mode==="stop"?"block":"none";
+  if(T.mode==="stop"){cfg.innerHTML="";}
+  else if(T.mode==="rest"){
+    cfg.innerHTML='<div class="tset"><div class="field"><label>Rest seconds</label>'+
+      '<input id="cfgRest" inputmode="numeric" value="'+T.restSet+'"></div>'+
+      '<div class="field"><label>Quick set</label><div class="rowbtns">'+
+      '<button class="btn" onclick="setRest(60)">60</button><button class="btn" onclick="setRest(90)">90</button>'+
+      '<button class="btn" onclick="setRest(120)">120</button></div></div></div>';
+  } else {
+    cfg.innerHTML='<div class="tset"><div class="field"><label>Work (s)</label><input id="cfgW" inputmode="numeric" value="'+T.intWork+'"></div>'+
+      '<div class="field"><label>Rest (s)</label><input id="cfgR" inputmode="numeric" value="'+T.intRest+'"></div>'+
+      '<div class="field"><label>Rounds</label><input id="cfgN" inputmode="numeric" value="'+T.intRounds+'"></div></div>';
+  }
+  updateClock();
+  document.getElementById("laps").innerHTML=T.laps.map((l,i)=>'<div class="lap"><span>'+(T.mode==="stop"?"Lap "+(i+1):"Round "+(i+1))+'</span><span class="mono">'+l+'</span></div>').join("");
+  document.getElementById("tStartStop").textContent=T.running?"Pause":"Start";
+}
+function updateClock(){
+  const c=document.getElementById("clock");const ph=document.getElementById("tphase");
+  c.className="clock mono";ph.textContent="";
+  if(T.mode==="stop"){c.textContent=fmt(T.ms);}
+  else if(T.mode==="rest"){
+    const rem=T.restSet*1000-T.ms;c.textContent=fmt(rem);c.classList.add("rest");
+    ph.textContent=T.running?"Rest":"";
+    if(rem<=0&&T.running){beep(880,.25);stopTimer();T.ms=0;c.textContent=fmt(T.restSet*1000);ph.textContent="Go!";}
+  } else {
+    const dur=(T.phase==="work"?T.intWork:T.intRest)*1000;const rem=dur-T.ms;
+    c.textContent=fmt(rem);c.classList.add(T.phase==="work"?"go":"rest");
+    ph.textContent=(T.phase==="work"?"WORK":"REST")+" · "+T.roundsLeft+" left";
+  }
+}
+function tick(ts){
+  if(!T.running)return;
+  if(!T.last)T.last=ts;
+  T.ms+=ts-T.last;T.last=ts;
+  if(T.mode==="interval"){
+    const dur=(T.phase==="work"?T.intWork:T.intRest)*1000;
+    if(T.ms>=dur){
+      if(T.phase==="work"){beep(660,.15);T.phase="rest";T.ms=0;}
+      else{T.roundsLeft--;
+        if(T.roundsLeft<=0){beep(880,.4);stopTimer();T.phase="work";T.ms=0;updateClock();
+          document.getElementById("tphase").textContent="Done ✓";return;}
+        beep(520,.15);T.phase="work";T.ms=0;}
+    }
+  } else if(T.mode==="rest"){
+    if(T.restSet*1000-T.ms<=0){updateClock();return;}
+  }
+  updateClock();
+  T.raf=requestAnimationFrame(tick);
+}
+document.getElementById("tStartStop").onclick=()=>{
+  if(T.running){stopTimer();return;}
+  if(!T.ac){try{T.ac=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+  if(T.mode==="rest"){const v=+document.getElementById("cfgRest").value||90;T.restSet=v;T.ms=0;}
+  if(T.mode==="interval"){
+    T.intWork=+document.getElementById("cfgW").value||60;
+    T.intRest=+document.getElementById("cfgR").value||90;
+    T.intRounds=+document.getElementById("cfgN").value||6;
+    if(T.roundsLeft<=0){T.roundsLeft=T.intRounds;T.phase="work";T.ms=0;}
+  }
+  T.running=true;T.last=0;T.raf=requestAnimationFrame(tick);renderTimer();
+};
+function stopTimer(){T.running=false;if(T.raf)cancelAnimationFrame(T.raf);T.raf=null;T.last=0;
+  const b=document.getElementById("tStartStop");if(b)b.textContent="Start";}
+document.getElementById("tReset").onclick=()=>{stopTimer();T.ms=0;T.laps=[];T.roundsLeft=0;T.phase="work";renderTimer();};
+document.getElementById("tLap").onclick=()=>{if(T.mode==="stop"){T.laps.push(fmt(T.ms));renderTimer();
+  document.getElementById("laps").scrollTop=1e6;}};
+window.setRest=function(v){T.restSet=v;const i=document.getElementById("cfgRest");if(i)i.value=v;T.ms=0;updateClock();};
+
+/* ============ TABS + boot ============ */
+function switchTab(t){
+  curTab=t;
+  ["train","tests","course","fuel","more"].forEach(x=>
+    document.getElementById("view-"+x).classList.toggle("hidden",x!==t));
+  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));
+  if(t==="tests")renderTests();
+  if(t==="course")renderCourse();
+  if(t==="fuel")renderFuel();
+  if(t==="more")renderMore();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+
+function renderAll(){renderSpine();renderStrip();renderTrain();}
+function countdown(){
+  const d=Math.max(0,Math.ceil((RACE-new Date())/864e5));
+  document.getElementById("cd").textContent=d;
+}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+let toastT;
+function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("on");
+  clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("on"),1600);}
+
+countdown();setInterval(countdown,3600e3);
+renderAll();
+</script>
+</body>
+</html>
