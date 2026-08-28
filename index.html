@@ -78,6 +78,8 @@
   .sigline{margin-top:10px;font-size:12.5px;color:var(--text);background:var(--panel3);
     border-radius:10px;padding:9px 11px;line-height:1.4;}
   .sigline b{color:var(--ph);}
+  .target{font-size:11.5px;line-height:1.5;color:var(--accent);background:rgba(245,185,66,.09);border:1px solid rgba(245,185,66,.28);border-radius:9px;padding:8px 11px;margin-bottom:11px;font-weight:600;}
+  .target.hint{color:var(--muted);background:var(--panel2);border-color:var(--border);font-weight:500;}
 
   /* How-to-read key */
   .readkey{background:var(--panel);border:1px solid var(--border);border-radius:12px;margin-bottom:12px;overflow:hidden;}
@@ -291,16 +293,16 @@ function tmpl(phase){
   const P1=[
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — lower / pull",
       d:"Heavy, crisp, low volume — protect the base, don't chase fatigue.\n• Back or Front Squat 4×4–5 @ ~80%\n• Trap-bar DL or RDL 3×5\n• Weighted split squat / step-up 3×8/leg\n• Pull-ups or heavy row 4×6\n• Loaded carry + hard core\nOptional: 15-min easy shakeout jog after.",f:F.str},
-    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + erg technique",
-      d:"• 30–40 min easy Zone 2 (conversational — go slower than feels good)\n• Then Ski + Row TECHNIQUE: long powerful strokes, row 26–30 spm, big legs→hips→arms.\nForm over effort today.",f:F.easy},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 run + erg technique",
+      d:"• Run: 30–40 min easy Zone 2 (conversational — go slower than feels good).\n• Erg technique: Ski 6×150m + Row 6×150m, easy relaxed effort, ~45s rest each. Long powerful strokes, row 26–30 spm, big legs→hips→arms. Form over speed.",f:F.easy,pace:["easy","ergTech"]},
     {dn:"Wed",tag:"Run · Intervals",type:"int",g:"int",t:w=>"Run intervals — "+w.sig,
-      d:w=>"• "+w.sig+"\nThe seconds listed (e.g. \"90s jog\") are your easy recovery BETWEEN reps — not the rep time. Warm up + cool down 10 min each. Add a couple of 180° turnarounds to mimic the looped course.",f:F.int},
+      d:w=>"• "+w.sig+"\nThe seconds listed (e.g. \"90s jog\") are your easy recovery BETWEEN reps — not the rep time. Warm up + cool down 10 min each. Add a couple of 180° turnarounds to mimic the looped course.",f:F.int,pace:w=>w.pc?[w.pc]:[]},
     {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — push / power",
       d:"• Front or Box Squat 4×5\n• Overhead Press 4×5\n• Hip thrust / hinge 3×8\n• DB bench or push press 4×6\n• Keep 2–3 sets jumps or med-ball throws (protect D-10 power)\n• Core",f:F.str},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",
       d:"Full rest or 20–30 min mobility. Calves, ankles, hips as mileage climbs.",f:F.none},
     {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:w=>"Long run — "+w.long+" km Z2",
-      d:w=>"• "+w.long+" km easy Zone 2. Treadmill at 0–1% is fine (flat & indoor = race-specific).\nLast 10–15 min can drift slightly firmer.",f:F.long},
+      d:w=>"• "+w.long+" km easy Zone 2. Treadmill at 0–1% is fine (flat & indoor = race-specific).\nLast 10–15 min can drift slightly firmer.",f:F.long,pace:["long"]},
     {dn:"Sun",tag:"Stations",type:"station",g:"circuit",t:"Station circuit (moderate)",
       d:"Familiarity + quality reps, not a grind:\n• Sled push 3×12.5m\n• Sled pull 3×12.5m\n• Farmers 3×50m\n• Sandbag lunges 3×25m\n• Wall balls 3×20\nModerate loads. Or take a second rest day if legs are cooked.",f:F.station}
   ];
@@ -308,14 +310,14 @@ function tmpl(phase){
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — heavier lower",
       d:"• Squat 4×4 @ ~82–85%\n• Deadlift / RDL 3×4\n• Split squat 3×8/leg\n• Weighted pull-up or row 4×6\n• Core",f:F.str},
     {dn:"Tue",tag:"Run · Tempo",type:"int",g:"tempo",t:w=>"Threshold / tempo — "+w.sig,
-      d:w=>"• "+w.sig+" — comfortably-hard, ~15–20s/km slower than 5k pace. Any seconds listed are easy jog between blocks.\n• + hard core finisher\nBuilds the ability to hold pace as lactate climbs.",f:F.int},
+      d:w=>"• "+w.sig+" — comfortably-hard, ~15–20s/km slower than 5k pace. Any seconds listed are easy jog between blocks.\n• + hard core finisher\nBuilds the ability to hold pace as lactate climbs.",f:F.int,pace:w=>w.pc?[w.pc]:[]},
     {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Station strength-endurance @ race wt",
       d:"Race weight (train sled ~10% heavier than Open so race feels light):\n• Sled push 4×12.5m @ 152kg+\n• Sled pull 4×12.5m @ 103kg+\n• Farmers 4×50m @ 2×24kg\n• Sandbag lunges 4×25m @ 20kg\n• Wall balls 4×25\nShorter rest as weeks progress.",f:F.station},
-    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + erg intervals",
-      d:"• 30 min easy Z2\n• Erg: 4–6×500m hard (Ski or Row) w/ 1 min. Long strokes, pace by feel.",f:F.easy},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 run + erg intervals",
+      d:"• Run: 30 min easy Z2.\n• Erg intervals: 5×500m hard (alternate Ski/Row), 60s rest. Long strokes, hold an even split across all five.",f:F.easy,pace:["easy","ergHard"]},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest or light mobility.",f:F.none},
     {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:w=>"Long run — "+w.long+" km",
-      d:w=>"• "+w.long+" km Zone 2. Fuel it if >75 min.",f:F.long},
+      d:w=>"• "+w.long+" km Zone 2. Fuel it if >75 min.",f:F.long,pace:["long"]},
     {dn:"Sun",tag:"Hybrid",type:"hybrid",g:"hybrid",t:w=>w.sunSig||"Hybrid / compromised",
       d:w=>w.sunDetail||"Compromised running — running well on trashed legs:\n• 4–6 rounds: 800m–1km run + one station at race weight, short rest.",f:w=>w.simSun?F.sim:F.hybrid}
   ];
@@ -323,14 +325,14 @@ function tmpl(phase){
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength — strength-endurance shift",
       d:"Trim pure max work, add density:\n• Squat 4×4 (maintain)\n• Trap-bar carry complex\n• Walking lunges loaded 3×20m\n• Push press 4×5\n• Core. Keep it heavy enough to hold strength, no grinders.",f:F.str},
     {dn:"Tue",tag:"Run · Race pace",type:"int",g:"racepace",t:w=>"HYROX-pace intervals — "+w.sig,
-      d:w=>"• "+w.sig+"\nRun each rep at GOAL RACE PACE; the seconds after are easy jog recovery between reps. Teach the legs what sustainable feels like — your worst race split should be Run 5–6, never 7–8.",f:F.int},
+      d:w=>"• "+w.sig+"\nRun each rep at GOAL RACE PACE; the seconds after are easy jog recovery between reps. Teach the legs what sustainable feels like — your worst race split should be Run 5–6, never 7–8.",f:F.int,pace:["race"]},
     {dn:"Wed",tag:"Compromised",type:"hybrid",g:"hybrid",t:w=>w.wedSig||"Compromised combos @ race weight",
-      d:w=>w.wedDetail||"Run→station→run in race order, race weights, minimal rest. The money session.",f:F.hybrid},
-    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + short erg (or rest)",
-      d:"• 25–35 min easy Z2 + 3×500m erg\nSwap for full rest if recovery is lagging — auto-regulate in peak weeks.",f:F.easy},
+      d:w=>w.wedDetail||"Run→station→run in race order, race weights, minimal rest. The money session.",f:F.hybrid,pace:["race"]},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 run + short erg (or rest)",
+      d:"• Run: 25–35 min easy Z2.\n• Erg: 3×500m at 500m target split, 60s rest.\nSwap the whole day for full rest if recovery is lagging — auto-regulate in peak weeks.",f:F.easy,pace:["easy","ergHard"]},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Full rest. Sleep is the session.",f:F.none},
     {dn:"Sat",tag:"Long / Sim",type:"sim",g:"long",t:w=>w.satSig||("Long run — "+w.long+" km"),
-      d:w=>w.satDetail||("• "+w.long+" km Zone 2."),f:w=>w.satSim?F.sim:F.long},
+      d:w=>w.satDetail||("• "+w.long+" km Zone 2."),f:w=>w.satSim?F.sim:F.long,pace:w=>w.satSim?["race"]:["long"]},
     {dn:"Sun",tag:"Hybrid",type:"hybrid",g:"hybrid2",t:"Second hybrid / station volume",
       d:"Lighter than Wed: station volume or an easy compromised circuit. Recovery if the sim was Saturday.",f:F.hybrid}
   ];
@@ -344,47 +346,47 @@ function tmpl(phase){
 const BRIDGE=[
   {label:"Bridge · Week 1",sub:"Recovery — the week right after your D-10 peak / test",km:"~8",days:[
     {dn:"Mon",tag:"Recovery",type:"none",g:"",t:"Full rest + mobility",d:"Sleep is the priority coming off your D-10 peak. 10–15 min easy mobility if you want to move — nothing more.",f:F.none},
-    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Very easy jog — 20 min Z2",d:"Deliberately slow and conversational. This is the first gentle nudge from power work toward aerobic — a shake-out, not a workout.",f:F.easy},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Very easy jog — 20 min Z2",d:"Deliberately slow and conversational. This is the first gentle nudge from power work toward aerobic — a shake-out, not a workout.",f:F.easy,pace:["easy"]},
     {dn:"Wed",tag:"Recovery",type:"none",g:"",t:"Rest or 20–30 min walk",d:"Walk + mobility. Keep blood moving, zero intensity.",f:F.none},
-    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Very easy jog — 25 min Z2",d:"Same easy effort. Add 4×15s relaxed strides at the end if the legs feel good.",f:F.easy},
+    {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Very easy jog — 25 min Z2",d:"Same easy effort. Add 4×15s relaxed strides at the end if the legs feel good.",f:F.easy,pace:["easy"]},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Full rest.",f:F.none},
     {dn:"Sat",tag:"Strength",type:"str",g:"strA",t:"Light full-body maintenance",d:"One easy full-body session at ~60–70%:\n• Squat 3×5 (light)\n• Hinge 3×5\n• Press 3×6\n• Row/pull-up 3×8\nJust holding the base while you recover. Skip it if you'd rather stay fully rested.",f:F.str},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest. You're ready to start building next week.",f:F.none}
   ]},
   {label:"Bridge · Week 2",sub:"Aerobic re-entry begins",km:"~12",days:[
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body maintenance",d:"Moderate load, lower volume than D-10:\n• Squat 3×5\n• Hinge (RDL/DL) 3×5\n• Press 3×6\n• Row / pull-up 3×8\n• Core. Keep 2 sets of jumps or med-ball throws to hold your power.",f:F.str},
-    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 25 min Z2",d:"Conversational pace, nose-breathing-ish. Slower than feels satisfying — that's the point.",f:F.easy},
-    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg technique + easy jog",d:"• 15 min easy jog\n• SkiErg + Row TECHNIQUE: long, powerful strokes at 26–30 spm. 4×250m each, relaxed — focus on the stroke, not speed.",f:F.station},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 25 min Z2",d:"Conversational pace, nose-breathing-ish. Slower than feels satisfying — that's the point.",f:F.easy,pace:["easy"]},
+    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg technique + easy jog",d:"• 15 min easy jog\n• SkiErg + Row TECHNIQUE: long, powerful strokes at 26–30 spm. 4×250m each, relaxed — focus on the stroke, not speed.",f:F.station,pace:["ergTech"]},
     {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body maintenance",d:"• Front / Box squat 3×5\n• Overhead press 3×5\n• Hip thrust 3×8\n• DB bench or push press 3×6\n• Core.",f:F.str},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest or light mobility.",f:F.none},
-    {dn:"Sat",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 30 min Z2",d:"Your slightly longer run this week. Still fully easy.",f:F.easy},
+    {dn:"Sat",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 30 min Z2",d:"Your slightly longer run this week. Still fully easy.",f:F.easy,pace:["easy"]},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest or 20 min walk",d:"Optional easy walk. No running.",f:F.none}
   ]},
   {label:"Bridge · Week 3",sub:"Build easy volume + start the stations",km:"~16",days:[
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body",d:"As Week 2; nudge loads up slightly if the sets feel crisp. Squat / hinge / press / pull + core.",f:F.str},
-    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 30–35 min Z2 + strides",d:"Conversational, then 4×15s relaxed strides at the end.",f:F.easy},
-    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg intervals + wall-ball form",d:"• Ski 4×300m, Row 4×300m — smooth, moderate, long strokes\n• Wall balls 3×15 to the 10 ft target — groove the rhythm, keep it light.",f:F.station},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 30–35 min Z2 + strides",d:"Conversational, then 4×15s relaxed strides at the end.",f:F.easy,pace:["easy"]},
+    {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Erg intervals + wall-ball form",d:"• Ski 4×300m, Row 4×300m — smooth, moderate, long strokes\n• Wall balls 3×15 to the 10 ft target — groove the rhythm, keep it light.",f:F.station,pace:["ergTech"]},
     {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body",d:"Squat / press / hinge / push + core. Moderate.",f:F.str},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest.",f:F.none},
-    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"First long run — 6 km easy Z2",d:"Your first 'long' one. Keep it fully conversational; treadmill at 0–1% is fine (flat & indoor = race-specific).",f:F.long},
+    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"First long run — 6 km easy Z2",d:"Your first 'long' one. Keep it fully conversational; treadmill at 0–1% is fine (flat & indoor = race-specific).",f:F.long,pace:["long"]},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest or 20 min walk",d:"Easy walk or rest.",f:F.none}
   ]},
   {label:"Bridge · Week 4",sub:"Steady base + station familiarization",km:"~20",days:[
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — full-body",d:"Squat / hinge / press / pull + core, moderate.",f:F.str},
-    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 35 min Z2 + strides",d:"35 min easy + 4–6×15s strides (gentle turnover, not sprints).",f:F.easy},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy run — 35 min Z2 + strides",d:"35 min easy + 4–6×15s strides (gentle turnover, not sprints).",f:F.easy,pace:["easy"]},
     {dn:"Wed",tag:"Stations",type:"station",g:"circuit",t:"Station familiarization — all 8 movements",d:"Learn the movements & transitions, don't grind:\n• Sled push 4×12.5m (moderate)\n• Sled pull 4×12.5m\n• Farmers 3×40m\n• Sandbag lunge 3×20m\n• Wall balls 3×20\n• Burpee broad jumps 2×10m",f:F.station},
     {dn:"Thu",tag:"Strength",type:"str",g:"strB",t:"Strength B — full-body",d:"Moderate full-body + core.",f:F.str},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest / mobility",d:"Rest.",f:F.none},
-    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 7 km easy Z2",d:"Easy and conversational. Fuel lightly if it runs long.",f:F.long},
-    {dn:"Sun",tag:"Run · Easy",type:"easy",g:"easy",t:"Optional easy 25 min jog",d:"Very easy shakeout, or rest if the legs are cooked.",f:F.easy}
+    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 7 km easy Z2",d:"Easy and conversational. Fuel lightly if it runs long.",f:F.long,pace:["long"]},
+    {dn:"Sun",tag:"Run · Easy",type:"easy",g:"easy",t:"Optional easy 25 min jog",d:"Very easy shakeout, or rest if the legs are cooked.",f:F.easy,pace:["easy"]}
   ]},
   {label:"Bridge · Week 5",sub:"Set your baselines, then hand off to Week 1",km:"~18 + tests",days:[
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Strength A — lighter (testing this week)",d:"Trim the volume so you're fresh for the tests. Moderate load, crisp sets.",f:F.str},
-    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 25 min + strides",d:"Shakeout + 4×20s strides. Keep it light before tomorrow's test.",f:F.easy},
+    {dn:"Tue",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 25 min + strides",d:"Shakeout + 4×20s strides. Keep it light before tomorrow's test.",f:F.easy,pace:["easy"]},
     {dn:"Wed",tag:"Benchmark",type:"none",g:"",t:"TEST 1 — 5 km time trial",d:"Warm up well (15 min easy + a few strides), then run a hard, even 5 km. This sets your easy / threshold / interval paces for the whole plan. Log it in the Tests tab.",f:F.none},
     {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy 25–30 min + erg technique",d:"Easy Z2 to flush the legs + a few relaxed Ski/Row pieces. No hard efforts.",f:F.none},
     {dn:"Fri",tag:"Benchmark",type:"none",g:"",t:"TEST 2 — ergs, wall balls & 1 km feel",d:"After a warm-up, log each in the Tests tab:\n• 500m SkiErg for time\n• 500m Row for time\n• Max unbroken wall balls\n• 1 km at 'HYROX pace' (≈ your 5k pace + 15–20s/km) — note how it feels; this is your goal race-run pace.",f:F.none},
-    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 8 km easy Z2",d:"Last bridge run. Comfortable and easy. Week 1 starts Monday.",f:F.long},
+    {dn:"Sat",tag:"Run · Long",type:"long",g:"long",t:"Long run — 8 km easy Z2",d:"Last bridge run. Comfortable and easy. Week 1 starts Monday.",f:F.long,pace:["long"]},
     {dn:"Sun",tag:"Recovery",type:"none",g:"",t:"Rest — ready for Week 1",d:"Full rest. Base built, paces set, stations learned. Phase 1 begins tomorrow.",f:F.none}
   ]}
 ];
@@ -392,7 +394,7 @@ function bridgeFlat(){return BRIDGE.reduce((a,w)=>a.concat(w.days),[]);}
 const P4_WEEKS={
   14:[
     {dn:"Mon",tag:"Strength",type:"str",g:"strA",t:"Light strength (crisp)",d:"Low volume, moderate load. Movement, not fatigue.",f:F.str},
-    {dn:"Tue",tag:"Run · Race pace",type:"int",g:"racepace",t:"Sharp — 4×1 km @ race pace",d:"4×1km at goal race pace, 90s easy jog recovery between reps. Feel fast and smooth.",f:F.int},
+    {dn:"Tue",tag:"Run · Race pace",type:"int",g:"racepace",t:"Sharp — 4×1 km @ race pace",d:"4×1km at goal race pace, 90s easy jog recovery between reps. Feel fast and smooth.",f:F.int,pace:["race"]},
     {dn:"Wed",tag:"Compromised",type:"hybrid",g:"hybrid",t:"Short compromised touch",d:"3×(800m run + 1 station @ race wt). Quality, not volume.",f:F.hybrid},
     {dn:"Thu",tag:"Run · Easy",type:"easy",g:"easy",t:"Easy Z2 + strides",d:"25–30 min easy + 4–6×20s strides.",f:F.easy},
     {dn:"Fri",tag:"Recovery",type:"none",g:"",t:"Rest",d:"Rest.",f:F.none},
@@ -419,28 +421,28 @@ const P4_WEEKS={
 // week-by-week meta
 const WMETA=[
   {id:0,label:"Bridge",date:"now → Oct 25",phase:"bridge",theme:"Re-entry",runKm:"10→18",long:"6–8",deload:false,sig:"Easy Z2 + erg technique"},
-  {id:1,label:"W1",date:"Oct 26",phase:"p1",theme:"Aerobic Base",runKm:"~20",long:8,deload:false,sig:"6×800m @ 5k pace, 90s jog recovery"},
-  {id:2,label:"W2",date:"Nov 2",phase:"p1",theme:"Aerobic Base",runKm:"~24",long:9,deload:false,sig:"8×400m faster than 5k pace, 75s jog recovery"},
-  {id:3,label:"W3",date:"Nov 9",phase:"p1",theme:"Aerobic Base",runKm:"~28",long:11,deload:false,sig:"5×1km @ threshold, 60s jog recovery"},
-  {id:4,label:"W4",date:"Nov 16",phase:"p1",theme:"Base · DELOAD",runKm:"~18",long:8,deload:true,sig:"Short intervals + station skills"},
-  {id:5,label:"W5",date:"Nov 23",phase:"p2",theme:"Strength-Endurance",runKm:"~26",long:11,deload:false,sig:"20 min continuous tempo",
+  {id:1,label:"W1",date:"Oct 26",phase:"p1",theme:"Aerobic Base",runKm:"~20",long:8,deload:false,sig:"6×800m @ 5k pace, 90s jog recovery",pc:"int800"},
+  {id:2,label:"W2",date:"Nov 2",phase:"p1",theme:"Aerobic Base",runKm:"~24",long:9,deload:false,sig:"8×400m faster than 5k pace, 75s jog recovery",pc:"int400"},
+  {id:3,label:"W3",date:"Nov 9",phase:"p1",theme:"Aerobic Base",runKm:"~28",long:11,deload:false,sig:"5×1km @ threshold, 60s jog recovery",pc:"int1kThr"},
+  {id:4,label:"W4",date:"Nov 16",phase:"p1",theme:"Base · DELOAD",runKm:"~18",long:8,deload:true,sig:"Short intervals + station skills",pc:"int800"},
+  {id:5,label:"W5",date:"Nov 23",phase:"p2",theme:"Strength-Endurance",runKm:"~26",long:11,deload:false,sig:"20 min continuous tempo",pc:"tempo",
     sunSig:"Compromised intro — 4×(1km + station)",sunDetail:"Compromised running, easy weights, short rest:\n• 4 rounds: 1km run + one station (rotate ski/sled/burpee/wall balls)."},
-  {id:6,label:"W6",date:"Nov 30",phase:"p2",theme:"Strength-Endurance",runKm:"~30",long:12,deload:false,sig:"3×8 min tempo, 90s jog between blocks",
+  {id:6,label:"W6",date:"Nov 30",phase:"p2",theme:"Strength-Endurance",runKm:"~30",long:12,deload:false,sig:"3×8 min tempo, 90s jog between blocks",pc:"tempo",
     sunSig:"Compromised — 5×(1km + station)",sunDetail:"5 rounds: 1km run + one station @ race weight, short rest."},
-  {id:7,label:"W7",date:"Dec 7",phase:"p2",theme:"Str-End · TEST",runKm:"~34",long:14,deload:false,sig:"4×6 min tempo, 90s jog between blocks",
+  {id:7,label:"W7",date:"Dec 7",phase:"p2",theme:"Str-End · TEST",runKm:"~34",long:14,deload:false,sig:"4×6 min tempo, 90s jog between blocks",pc:"tempo",
     sunSig:"⏱ HALF-SIMULATION — time it",simSun:true,sunDetail:"HALF-SIM: 4×(1km + station), first four stations (Ski→Sled Push→Sled Pull→Burpee BJ), race weights. Time the total & log it in Tests."},
   {id:8,label:"W8",date:"Dec 14",phase:"p2",theme:"Str-End · DELOAD",runKm:"~22",long:9,deload:true,sig:"Easy runs + short openers",
     sunSig:"Easy station skills",sunDetail:"Light technique work only — deload week."},
-  {id:9,label:"W9",date:"Dec 21",phase:"p3",theme:"Race Specificity",runKm:"~30",long:12,deload:false,sig:"5×1km @ race pace, 90s jog recovery",
+  {id:9,label:"W9",date:"Dec 21",phase:"p3",theme:"Race Specificity",runKm:"~30",long:12,deload:false,sig:"5×1km @ race pace, 90s jog recovery",pc:"race",
     wedSig:"Compromised — 5×(1km + station)",wedDetail:"5 rounds race order: 1km run + station @ race weight, jog transitions."},
-  {id:10,label:"W10",date:"Dec 28",phase:"p3",theme:"Race Specificity",runKm:"~34",long:13,deload:false,sig:"6×1km @ race pace, 75s jog recovery",
+  {id:10,label:"W10",date:"Dec 28",phase:"p3",theme:"Race Specificity",runKm:"~34",long:13,deload:false,sig:"6×1km @ race pace, 75s jog recovery",pc:"race",
     wedSig:"Compromised — 6×(1km + station)",wedDetail:"6 rounds race order, race weights, minimal rest."},
-  {id:11,label:"W11",date:"Jan 4",phase:"p3",theme:"Specific · MINI-DELOAD",runKm:"~28",long:10,deload:true,sig:"4×1km @ race pace, 90s jog recovery",
+  {id:11,label:"W11",date:"Jan 4",phase:"p3",theme:"Specific · MINI-DELOAD",runKm:"~28",long:10,deload:true,sig:"4×1km @ race pace, 90s jog recovery",pc:"race",
     wedSig:"Easy compromised (deload)",wedDetail:"Reduced volume — 3×(1km + light station).",
     satSig:"⏱ ~75% SIMULATION",satSim:true,satDetail:"6 stations in race order + runs, race weights. Practice transitions — jog every Roxzone. Log total in Tests."},
-  {id:12,label:"W12",date:"Jan 11",phase:"p3",theme:"Race Specificity",runKm:"~36 (peak)",long:14,deload:false,sig:"5×1km @ race pace + 2×400 fast, 90s recovery",
+  {id:12,label:"W12",date:"Jan 11",phase:"p3",theme:"Race Specificity",runKm:"~36 (peak)",long:14,deload:false,sig:"5×1km @ race pace + 2×400 fast, 90s recovery",pc:"race",
     wedSig:"Compromised — race weights",wedDetail:"6–7 rounds race order at race weight. Peak specific session."},
-  {id:13,label:"W13",date:"Jan 18",phase:"p3",theme:"Specific · DRESS REHEARSAL",runKm:"~32",long:12,deload:false,sig:"4×1km @ race pace (sharp), 90s jog recovery",
+  {id:13,label:"W13",date:"Jan 18",phase:"p3",theme:"Specific · DRESS REHEARSAL",runKm:"~32",long:12,deload:false,sig:"4×1km @ race pace (sharp), 90s jog recovery",pc:"race",
     wedSig:"Short compromised primer",wedDetail:"3×(1km + station) — keep it crisp before Saturday's sim.",
     satSig:"⏱ NEAR-FULL SIMULATION (~3 wks out)",satSim:true,satDetail:"All 8 (or 8 runs + 6–8 stations), race weights, race pacing. Your dress rehearsal — taper begins after this. Log total in Tests."}
 ];
@@ -473,7 +475,8 @@ function daysFor(w){
     dn:d.dn,tag:d.tag,type:d.type,g:d.g,
     t:typeof d.t==="function"?d.t(w):d.t,
     d:typeof d.d==="function"?d.d(w):d.d,
-    f:typeof d.f==="function"?d.f(w):d.f
+    f:typeof d.f==="function"?d.f(w):d.f,
+    pace:typeof d.pace==="function"?d.pace(w):d.pace
   }));
 }
 function metaFor(id){
@@ -483,7 +486,70 @@ function metaFor(id){
   return WMETA[id];
 }
 
-/* ============ RENDER: header spine + weekstrip ============ */
+/* ============ PACING ENGINE (test-driven) ============ */
+function parseT(v){ if(v==null)return null; v=String(v).trim(); if(!v)return null;
+  if(v.indexOf(":")>=0){const p=v.split(":").map(x=>parseFloat(x)); if(p.some(isNaN))return null;
+    return p.length===3? p[0]*3600+p[1]*60+p[2] : p[0]*60+p[1];}
+  const n=parseFloat(v); return isNaN(n)?null:n; }
+function fmtT(s){ s=Math.round(s); const m=Math.floor(s/60),ss=s%60; return m+":"+String(ss).padStart(2,"0"); }
+function latestBm(k){ const h=sget("bm_"+k,[]); return h.length? h[h.length-1].v : null; }
+function latestBmDate(k){ const h=sget("bm_"+k,[]); return h.length? h[h.length-1].d : ""; }
+function computePaces(){
+  const t5=parseT(latestBm("tt5k"));
+  const p={};
+  if(t5){ const pk=t5/5;
+    p.fivek=pk; p.easyLo=pk+60; p.easyHi=pk+90; p.thr=pk+15;
+    p.rep800=pk*0.8; p.rep400=(pk-12)*0.4;
+    const kmr=parseT(latestBm("km1")); p.race=kmr?kmr:pk+18; p.kmThr=pk+15;
+    p.dateRun=latestBmDate("tt5k"); }
+  const sk=parseT(latestBm("ski500")); if(sk){ p.skiEasy=sk+20; p.skiHard=sk+3; }
+  const rw=parseT(latestBm("row500")); if(rw){ p.rowEasy=rw+20; p.rowHard=rw+3; }
+  return (t5||sk||rw)?p:null;
+}
+function paceTargets(codes){
+  if(!codes||!codes.length)return "";
+  const p=computePaces();
+  const needsRun=codes.some(c=>["easy","long","tempo","int800","int400","int1kThr","race"].indexOf(c)>=0);
+  if(!p||(needsRun&&!p.fivek))
+    return '<div class="target hint">→ Log your 5 km test (Tests tab) and this shows your target paces.</div>';
+  const o=[];
+  codes.forEach(c=>{
+    if(c==="easy")o.push("Easy Z2 "+fmtT(p.easyLo)+"–"+fmtT(p.easyHi)+"/km");
+    else if(c==="long")o.push("Pace "+fmtT(p.easyLo)+"–"+fmtT(p.easyHi)+"/km");
+    else if(c==="tempo")o.push("Threshold "+fmtT(p.thr)+"/km");
+    else if(c==="int800")o.push("Each 800m ≈ "+fmtT(p.rep800)+" ("+fmtT(p.fivek)+"/km)");
+    else if(c==="int400")o.push("Each 400m ≈ "+fmtT(p.rep400));
+    else if(c==="int1kThr")o.push("Each 1km ≈ "+fmtT(p.kmThr)+" (threshold)");
+    else if(c==="race")o.push("Each 1km ≈ "+fmtT(p.race)+"/km (race pace)");
+    else if(c==="ergTech"&&(p.skiEasy||p.rowEasy))o.push("Erg easy ≈ "+ergPair(p.skiEasy,p.rowEasy)+"/500m");
+    else if(c==="ergHard"&&(p.skiHard||p.rowHard))o.push("500m target ≈ "+ergPair(p.skiHard,p.rowHard));
+  });
+  return o.length?'<div class="target">→ '+o.join("&nbsp;&nbsp;·&nbsp;&nbsp;")+'</div>':"";
+}
+function ergPair(ski,row){ const a=[]; if(ski)a.push(fmtT(ski)+" Ski"); if(row)a.push(fmtT(row)+" Row"); return a.join(" · "); }
+function pacesCard(){
+  const p=computePaces();
+  if(!p||!p.fivek)
+    return '<div class="card"><h3>Your training paces <span class="pill">auto</span></h3>'+
+      '<p>Log your <b>5 km time trial</b> below (plus 500m Ski & Row) and every run/erg session in the plan will show <b>your</b> target pace and splits — and recompute automatically each time you re-test.</p>'+
+      '<p class="note">You set these in Bridge Week 5. Until then, sessions guide you by feel (Z2 = conversational).</p></div>';
+  let r="";
+  const R=(a,b)=>r+='<tr><td>'+a+'</td><td>'+b+'</td></tr>';
+  R("Easy / Z2",fmtT(p.easyLo)+"–"+fmtT(p.easyHi)+"/km");
+  R("Long run",fmtT(p.easyLo)+"–"+fmtT(p.easyHi)+"/km");
+  R("Threshold / tempo",fmtT(p.thr)+"/km");
+  R("5k-pace reps",fmtT(p.fivek)+"/km · 800m "+fmtT(p.rep800));
+  R("400m reps",fmtT(p.rep400)+" each");
+  R("Race pace (goal)",fmtT(p.race)+"/km");
+  if(p.skiHard)R("SkiErg 500m","easy "+fmtT(p.skiEasy)+" · hard "+fmtT(p.skiHard));
+  if(p.rowHard)R("Row 500m","easy "+fmtT(p.rowEasy)+" · hard "+fmtT(p.rowHard));
+  const src=p.dateRun?(" (from your "+p.dateRun+" 5k)"):"";
+  return '<div class="card"><h3>Your training paces <span class="pill">auto</span></h3>'+
+    '<table class="ref">'+r+'</table>'+
+    '<p class="note">Computed from your most recent tests'+src+' — these drive the → target line on each session. Re-test your 5k at <b>Week 8</b> (fresh in the deload) to move them as your engine grows; your W7/W11/W13 sims track it too.</p></div>';
+}
+
+
 function renderSpine(){
   const el=document.getElementById("spine");el.innerHTML="";
   let idx=0;
@@ -559,6 +625,7 @@ function renderTrain(){
      '<div class="stat"><div class="k">Long run</div><div class="v">'+m.long+(m.long==="—"?"":" km")+'</div></div>'+
      '<div class="stat"><div class="k">Days</div><div class="v">'+days.filter(d=>d.type!=="none").length+'</div></div></div>';
   if(m.deload)h+='<div class="deloadtag">DELOAD — cut volume ~40–50%, keep the movements, drop intensity</div>';
+  if(curWeek===8)h+='<div class="target" style="margin-top:10px">↻ Re-test week — you\'re fresh. Re-run your 5 km (and 500m Ski/Row) and log them in Tests to update every pace for the back half.</div>';
   if(m.sig&&curWeek<14)h+='<div class="sigline">Signature session: <b>'+m.sig+'</b></div>';
   h+='</div>';
   days.forEach((d,i)=>{h+=dayCard(d,i);});
@@ -587,6 +654,7 @@ function dayCard(d,i){
   h+='</button>';
   h+='<div class="daybody">';
   h+='<div class="detail">'+d.d+'</div>';
+  h+=paceTargets(d.pace);
   if(d.f&&d.f.length){
     h+='<div class="fields">';
     d.f.forEach(f=>{
@@ -639,7 +707,7 @@ const TESTS=[
   {k:"sim",n:"Simulation total time",u:"",lower:true}
 ];
 function renderTests(){
-  let h='<div class="card"><h3>Benchmarks <span class="pill">retest: bridge · W8 · W13</span></h3>'+
+  let h=pacesCard()+'<div class="card"><h3>Benchmarks <span class="pill">retest: bridge · W8 · W13</span></h3>'+
     '<p>Log the same tests over the block. Watching these move is your proof the engine is coming — and they set every pace in the plan.</p></div>';
   TESTS.forEach(t=>{
     const hist=sget("bm_"+t.k,[]);
@@ -853,6 +921,7 @@ function switchTab(t){
   ["train","tests","course","fuel","more"].forEach(x=>
     document.getElementById("view-"+x).classList.toggle("hidden",x!==t));
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===t));
+  if(t==="train")renderTrain();
   if(t==="tests")renderTests();
   if(t==="course")renderCourse();
   if(t==="fuel")renderFuel();
